@@ -1,7 +1,7 @@
-//Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
-//SPDX-License-Identifier: Apache-2.0
+// Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
-package authen
+package authn
 
 import (
 	"encoding/base64"
@@ -28,7 +28,7 @@ type apigeeToken struct {
 	Scope                 string   `json:"scope"`
 }
 
-//Call the /token endpoint to exchange client credentials for Bearer token.
+// GetBearerToken calls the /token API endpoint to exchange client credentials for a Bearer token.
 func GetBearerToken() string {
 	data := url.Values{}
 	id, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsId"))
@@ -43,12 +43,12 @@ func GetBearerToken() string {
 	data.Set("client_secret", string(sec))
 	data.Set("grant_type", "client_credentials")
 
-	//Build the request URL.
+	// Build the request URL.
 	u, err := url.ParseRequestURI(viyaOrdersAPIHost)
 	if err != nil {
 		log.Panic("Error parsing Bearer token request URI: " + err.Error())
 	}
-	//u.Path = viyaOrdersAPIBasePath + viyaOrdersAPITokenPath
+
 	var b strings.Builder
 	fmt.Fprintf(&b, "%s", viyaOrdersAPIBasePath)
 	fmt.Fprintf(&b, "%s", viyaOrdersAPITokenPath)
@@ -68,7 +68,7 @@ func GetBearerToken() string {
 		log.Panic("Error on Bearer token request: " + err.Error())
 	}
 
-	//Get the response.
+	// Get the response.
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

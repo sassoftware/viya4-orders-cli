@@ -36,21 +36,29 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 ### Prerequisites
 * [Go](https://golang.org/) 1.13 or [Docker](https://www.docker.com/) is required.
 * You will need to obtain API credentials for the [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
-from the [SAS Apigee Developer Portal](https://apiportal.sas.com/).
+from the [SAS API Portal](https://apiportal.sas.com/).
 
 ### Installation
+Note: You must first clone the project unless you would like to build a Docker image directly from the GitHub repository.
 * Using [Make](https://www.gnu.org/software/make/): <br>
 ```make build```
 
 * Using [Docker](https://www.docker.com/): <br>
-```docker build -t viya4-orders-cli```
+  * If project already cloned, execute from project root:
+     ```
+     docker build . -t viya4-orders-cli
+     ```
+  * Or, build without cloning first:
+     ```
+     docker build github.com/sassoftware/viya4-orders-cli -t viya4-orders-cli
+     ```
 
 * Using go build: <br>
 ```go build main.go```
 
 ## Getting Started
 * If you do not yet have [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html) credentials, obtain 
-them from the [SAS Apigee Developer Portal](https://apiportal.sas.com/).
+them from the [SAS API Portal](https://apiportal.sas.com/).
 * If you intend to use Make or Docker, edit your Makefile or Dockerfile to add the command and order number plus other 
 arguments per the Usage doc in the [Overview](#Overview) section.
 * Choose your CLI options, which can be specified on the command line, as environment variables or in a config file 
@@ -80,7 +88,7 @@ unless named with a file extension that denotes another format. Supported format
 
 ### Examples
 * Get deployment assets for deployment of SAS Viya order 923456 with 30-day license at the 
-latest version of the Long Term Support cadence: <br>
+latest version of the Long Term Support (lts) cadence: <br>
 
    ```go run main.go dep 923456 lts -p ./sas -f 923456_lts_depassets```
 
@@ -134,7 +142,6 @@ on how to submit contributions to this project.
 This project is licensed under the [Apache 2.0 License](LICENSE).
 
 ## Additional Resources
-*TODO: There will be one more resource that pubs is currently working on
-* [SAS Apigee Developer Portal](https://apiportal.sas.com/docs/mysasprod/1/overview)
+* [SAS API Portal](https://apiportal.sas.com/docs/mysasprod/1/overview)
 * [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
 * [SAS Viya Operations Guide](https://documentation.sas.com/?softwareId=mysas&softwareVersion=prod&docsetId=itopswlcm&docsetTarget=home.htm)
