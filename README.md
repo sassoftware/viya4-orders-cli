@@ -38,8 +38,10 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 ### Prerequisites
 
 * [Go](https://golang.org/) 1.13 or [Docker](https://www.docker.com/) is required.
-* API credentials for the [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html). 
-You can obtain them from the [SAS API Portal](https://apiportal.sas.com/).
+* API credentials for the [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
+are required.
+
+   You can obtain them from the [SAS API Portal](https://apiportal.sas.com/).
 
 ### Installation
 
