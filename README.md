@@ -61,7 +61,7 @@ To clone the project, you have several options:
      ```
      docker build . -t viya4-orders-cli
      ```
-  * Or you can build it without cloning first:
+  * Or you can build the project without cloning first:
      ```
      docker build github.com/sassoftware/viya4-orders-cli -t viya4-orders-cli
      ```
@@ -79,8 +79,8 @@ If you intend to use Make or Docker, edit your makefile or dockerfile to add
   the command and order number, plus other arguments that are described in the
   [Overview](#Overview) section.
 
-Select CLI options. You can then specify them on the command line, pass in
-  as environment variables, or include in a config file.
+Select CLI options. You can then specify them on the command line, pass them in
+  as environment variables, or include them in a config file.
 
   SAS Viya Orders CLI options are applied in order of precedence, as follows:
   1. command-line specification
@@ -93,7 +93,7 @@ them as environment variables. You can also add them
 to your config file as values for `clientCredentialsId` and `clientCredentialsSecret`,
 respectively.
 
-If you are using a config file, create it. The default file is `$HOME/.viya4-orders-cli`.
+If you want to use a config file, create it. The default file is `$HOME/.viya4-orders-cli`.
 The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
 include a file extension that denotes another format. Supported formats are [JSON](https://www.json.org/), 
 [TOML](https://github.com/toml-lang/toml), [YAML](https://yaml.org/), [HCL](https://github.com/hashicorp/hcl), 
@@ -115,7 +115,7 @@ You have the following options for launching SAS Viya Orders CLI:
    docker run viya4-orders-cli
    ```
 
-* Using go run: <br>
+* Using `go run`: <br>
    ```
    go run main.go [command] [args] [flags]
    ```
@@ -147,7 +147,7 @@ latest version of the Long Term Support (`lts`) cadence: <br>
    
     ```go
       go run main.go lic 923456 lts 2020.0 -p ./sas -f 923456_lts_2020.0_license_ren1
-    ``` <br>
+    ```
    
    Sample output: <br>
      
@@ -164,7 +164,7 @@ latest version of the Long Term Support (`lts`) cadence: <br>
    
    ```
    go run main.go cer 923457 -p ./sas -f 923457_certs -o json
-   ``` <br>
+   ``` 
    
    Sample output: <br>
      
