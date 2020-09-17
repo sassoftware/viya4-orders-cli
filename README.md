@@ -49,7 +49,9 @@ you must first clone the project before you can use SAS Viya Orders CLI.
 To clone the project, you have several options:
 
 * Using [Make](https://www.gnu.org/software/make/): <br>
-```make build```
+  ```
+  make build
+  ```
 
 * Using [Docker](https://www.docker.com/): <br>
   * If you have already cloned the project, execute the following from the project 
@@ -63,7 +65,9 @@ To clone the project, you have several options:
      ```
 
 * Using `go build`: <br>
-```go build main.go```
+   ```
+   go build main.go
+   ```
 
 ## Getting Started
 If you do not yet have credentials for SAS Viya Orders API, obtain them from
@@ -100,17 +104,19 @@ include a file extension that denotes another format. Supported formats are [JSO
 You have the following options for launching SAS Viya Orders CLI:
 
 * Using [Make](https://www.gnu.org/software/make/): <br>
-```unix
-make run
-```
+   ```unix
+   make run
+   ```
 
 * Using [Docker](https://www.docker.com/): <br>
-```docker
-docker run viya4-orders-cli
-```
+   ```docker
+   docker run viya4-orders-cli
+   ```
 
 * Using go run: <br>
-```go run main.go [command] [args] [flags]```
+   ```
+   go run main.go [command] [args] [flags]
+   ```
 
 ### Examples
 
@@ -120,7 +126,9 @@ perform using SAS Viya Orders API:
 * Get deployment assets for deployment of SAS Viya order 923456 with a 30-day license at the 
 latest version of the Long Term Support (`lts`) cadence: <br>
 
-   ```go run main.go dep 923456 lts -p ./sas -f 923456_lts_depassets```
+   ```
+   go run main.go dep 923456 lts -p ./sas -f 923456_lts_depassets
+   ```
 
    Sample output: <br>
      
@@ -135,36 +143,39 @@ latest version of the Long Term Support (`lts`) cadence: <br>
    
 * Get a renewal license to apply to deployment of SAS Viya order 923456: <br>
    
-   ```go
+    ```go
       go run main.go lic 923456 lts 2020.0 -p ./sas -f 923456_lts_2020.0_license_ren1
-   ``` <br>
+    ``` <br>
    
    Sample output: <br>
      
- ```text
+   ```text
     OrderNumber: 923456
     AssetName: license
     AssetReqURL: https://api.sas.com/mysas/orders/923456/cadenceNames/lts/cadenceVersions/2020.0/license
     AssetLocation: ./sas/923456_lts_2020.0_license_ren1.jwt
     Cadence: Long Term Support 2020.0
     CadenceRelease:
-```
+   ```
+  
 * Get certificates for SAS Viya order 923457: <br>
    
-   ```go run main.go cer 923457 -p ./sas -f 923457_certs -o json``` <br>
+   ```
+   go run main.go cer 923457 -p ./sas -f 923457_certs -o json
+   ``` <br>
    
    Sample output: <br>
      
- ```
-{
+   ```
+   {
         "orderNumber": "923457",
         "assetName": "certificates",
         "assetReqURL": "https://api.sas.com/mysas/orders/923457/certificates",
         "assetLocation": "./sas/923457_certs.zip",
         "cadence": "",
         "cadenceRelease": ""
-}
-```
+   }
+   ```
 
 ## Contributing
 We welcome your contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details 
