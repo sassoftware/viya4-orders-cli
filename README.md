@@ -145,7 +145,7 @@ Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depas
 * Get a renewal license to apply to the deployment of SAS Viya order 923456 from above, with the contents going to file 
 `./sas/923456_lts_2020.0_license_ren1.jwt`: <br>
    
-    ```go
+    ```
       go run main.go lic 923456 lts 2020.0 -p ./sas -f 923456_lts_2020.0_license_ren1
     ```
    
