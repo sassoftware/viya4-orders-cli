@@ -5,7 +5,7 @@ endpoint to obtain the requested Viya software order assets for the given order.
 ## Overview
 You can use this CLI both as a tool and as an example of how to use Golang to call the 
 [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html). You can 
-also import the assetreqs and authen packages and use them in your own Golang project.
+also import the assetreqs and authn packages and use them in your own Golang project.
 ```
 Usage:
   viya4-orders-cli [command]
@@ -58,7 +58,7 @@ Note: You must first clone the project unless you would like to build a Docker i
 
 ## Getting Started
 * If you do not yet have [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html) credentials, obtain 
-them from the [SAS API Portal](https://apiportal.sas.com/).
+them from the [SAS API Portal](https://apiportal.sas.com/get-started).
 * If you intend to use Make or Docker, edit your Makefile or Dockerfile to add the command and order number plus other 
 arguments per the Usage doc in the [Overview](#Overview) section.
 * Choose your CLI options, which can be specified on the command line, as environment variables or in a config file 
