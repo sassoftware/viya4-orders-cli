@@ -87,9 +87,8 @@ Select CLI options. You can then specify them on the command line, pass them in
   1. default
   
 Base64 encode the OAuth client ID and client secret that serve as your API credentials and define 
-them as environment variables. You can also add them 
-to your config file as values for `clientCredentialsId` and `clientCredentialsSecret`,
-respectively.
+them as environment variables `clientCredentialsId` and `clientCredentialsSecret`, respectively. Alternatively, you 
+can define them in your config file.
 
 If you want to use a config file, create it. The default file is `$HOME/.viya4-orders-cli`.
 The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
@@ -128,7 +127,7 @@ perform using SAS Viya Orders API:
 Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depassets.tgz`: <br>
 
    ```
-   go run main.go dep 923456 lts -p ./sas -f 923456_lts_depassets
+   go run main.go dep 923456 lts -p ./sas -n 923456_lts_depassets
    ```
 
    Sample output: <br>
@@ -146,7 +145,7 @@ Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depas
 `./sas/923456_lts_2020.0_license_ren1.jwt`: <br>
    
     ```
-      go run main.go lic 923456 lts 2020.0 -p ./sas -f 923456_lts_2020.0_license_ren1
+      go run main.go lic 923456 lts 2020.0 -p ./sas -n 923456_lts_2020.0_license_ren1
     ```
    
    Sample output: <br>
@@ -163,7 +162,7 @@ Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depas
 * Get certificates for SAS Viya order 923457: <br>
    
    ```
-   go run main.go cer 923457 -p ./sas -f 923457_certs -o json
+   go run main.go cer 923457 -p ./sas -n 923457_certs -o json
    ``` 
    
    Sample output: <br>
