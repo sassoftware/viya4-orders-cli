@@ -79,7 +79,11 @@ func initConfig() {
 	}
 
 	if outFormat != "j" && outFormat != "json" {
-		log.Println("Using config file:", viper.ConfigFileUsed())
+		if viper.ConfigFileUsed() != "" {
+			log.Println("Using config file:", viper.ConfigFileUsed())
+		} else {
+			log.Println("No config file found")
+		}
 	}
 
 	// Read in environment vars.
