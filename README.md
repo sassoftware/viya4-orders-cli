@@ -71,12 +71,11 @@ To build the project, you have several options:
     ```
 
 ## Getting Started
-If you do not yet have credentials for SAS Viya Orders API, obtain them from
-  the [SAS API Portal](https://apiportal.sas.com/get-started).
+If you do not yet have credentials for [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html), 
+obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
 
-If you intend to use Make or Docker, edit your makefile or dockerfile to add
-  the command and order number, plus other arguments that are described in the
-  [Overview](#Overview) section.
+If you intend to use Make, edit your local copy of the makefile to add the command and order number, plus other 
+arguments you may need that are described in the [Overview](#Overview) section.
 
 Select CLI options. You can then specify them on the command line, pass them in
   as environment variables, or include them in a config file.
@@ -88,16 +87,28 @@ Select CLI options. You can then specify them on the command line, pass them in
   1. default
   
 Base64 encode the OAuth client ID and client secret that serve as your API credentials and define 
-them as environment variables `clientCredentialsId` and `clientCredentialsSecret`, respectively. Alternatively, you 
-can define them in your config file.
+them in your config file as `clientCredentialsId` and `clientCredentialsSecret`, respectively. Alternatively, you 
+can define them as environment variables.
 
-If you want to use a config file, create it. The default file is `$HOME/.viya4-orders-cli`.
+**NOTE:** When base64 encoding the credentials, take care not to encode end of line characters into the result. <br/>
+Example of the correct way to encode from a Linux command prompt:<br/>
+ `echo -n {secret} | base64 --encode`<br/><br/>
+Example of the incorrect way to encode from a Linux command prompt (encoded result will include \n):<br/>
+ `echo {secret} | base64 --encode`
+
+If you want to use a config file, create it. The default config file location is `$HOME/.viya4-orders-cli`.
 The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
 include a file extension that denotes another format. Supported formats are [JSON](https://www.json.org/), 
 [TOML](https://github.com/toml-lang/toml), [YAML](https://yaml.org/), [HCL](https://github.com/hashicorp/hcl), 
 [INI](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms717987(v=vs.85)), 
 [envfile](https://www.npmjs.com/package/envfile) or 
 [Java properties](https://docs.oracle.com/javase/tutorial/essential/environment/properties.html) formats.
+
+Sample YAML config file containing client credentials:
+```
+clientCredentialsId: 1a2B3c=
+clientCredentialsSecret: 4D5e6F==
+```
 
 ### Running
 
@@ -124,7 +135,7 @@ You have the following options for launching SAS Viya Orders CLI:
 ### Examples
 
 The examples in this section correspond to typical tasks that you might 
-perform using SAS Viya Orders API:
+perform using SAS Viya Orders CLI:
 
 * Using config file `/c/Users/auser/vocli/.viya4-orders-cli.yaml`, get deployment assets for SAS Viya order 923456 at 
 the latest version of the Long Term Support (`lts`) cadence, with the contents going to file 
