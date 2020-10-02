@@ -96,8 +96,9 @@ Example of the correct way to encode from a Linux command prompt:<br/>
 Example of the incorrect way to encode from a Linux command prompt (encoded result will include \n):<br/>
  `echo {secret} | base64 --encode`
 
-If you want to use a config file, create it. The default config file location is `$HOME/.viya4-orders-cli`.
-The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
+If you want to use a config file, create it. The default config file location is `$HOME/.viya4-orders-cli`, but you 
+can put the file anywhere you want as long as you use the --config option to inform the CLI of its whereabouts if not 
+in the default location. The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
 include a file extension that denotes another format. Supported formats are [JSON](https://www.json.org/), 
 [TOML](https://github.com/toml-lang/toml), [YAML](https://yaml.org/), [HCL](https://github.com/hashicorp/hcl), 
 [INI](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms717987(v=vs.85)), 
