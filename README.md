@@ -45,18 +45,13 @@ are required. You can obtain them from the [SAS API Portal](https://apiportal.sa
 To build the project, you have several options:
 
 * Using [Make](https://www.gnu.org/software/make/): <br>
-  * Clone the project from the GitHub repo, then
+  * Clone the project from the GitHub repo. Then, from the project root:
     ```
     make build
     ```
 
 * Using [Docker](https://www.docker.com/): <br>
-  * If you have already cloned the project, execute the following from the project 
-  root directory:
-     ```
-     docker build . -t viya4-orders-cli
-     ```
-  * Or you can build the project without cloning first:<br/><br/>
+  * You can build the project without cloning first:<br/><br/>
     http:
      ```
      docker build github.com/sassoftware/viya4-orders-cli -t viya4-orders-cli
@@ -65,9 +60,12 @@ To build the project, you have several options:
      ```
      docker build git@github.com:sassoftware/viya4-orders-cli.git -t viya4-orders-cli
      ```
-
+  * Or, clone the project from the GitHub repo. Then, from the project root:
+     ```
+     docker build . -t viya4-orders-cli
+     ```
 * Using `go build`: <br>
-  * Clone the project from the GitHub repo, then
+  * Clone the project from the GitHub repo. Then, from the project root:
     ```
     go build -o viya4-orders-cli main.go
     ```
@@ -106,6 +104,7 @@ include a file extension that denotes another format. Supported formats are [JSO
 You have the following options for launching SAS Viya Orders CLI:
 
 * Using [Make](https://www.gnu.org/software/make/): <br>
+  * If you haven't already, clone the project from the GitHub repo. Then, from the project root:
    ```unix
    make run
    ```
@@ -117,6 +116,7 @@ You have the following options for launching SAS Viya Orders CLI:
    ```
   
 * Using `go run`: <br>
+  * If you haven't already, clone the project from the GitHub repo. Then, from the project root:
    ```
    go run main.go [command] [args] [flags]
    ```
