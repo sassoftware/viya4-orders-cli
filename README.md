@@ -42,16 +42,13 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 are required. You can obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
 
 ### Installation
-
-**Note:** You can build a Docker image directly from the GitHub repository. Otherwise, 
-you must first clone the project before you can use SAS Viya Orders CLI.
-
 To build the project, you have several options:
 
 * Using [Make](https://www.gnu.org/software/make/): <br>
-  ```
-  make build
-  ```
+  * Clone the project from the GitHub repo, then
+    ```
+    make build
+    ```
 
 * Using [Docker](https://www.docker.com/): <br>
   * If you have already cloned the project, execute the following from the project 
@@ -59,15 +56,21 @@ To build the project, you have several options:
      ```
      docker build . -t viya4-orders-cli
      ```
-  * Or you can build the project without cloning first:
+  * Or you can build the project without cloning first:<br/><br/>
+    http:
      ```
      docker build github.com/sassoftware/viya4-orders-cli -t viya4-orders-cli
      ```
+    ssh:
+     ```
+     docker build git@github.com:sassoftware/viya4-orders-cli.git -t viya4-orders-cli
+     ```
 
 * Using `go build`: <br>
-   ```
-   go build -o viya4-orders-cli main.go
-   ```
+  * Clone the project from the GitHub repo, then
+    ```
+    go build -o viya4-orders-cli main.go
+    ```
 
 ## Getting Started
 If you do not yet have credentials for SAS Viya Orders API, obtain them from
@@ -110,9 +113,9 @@ You have the following options for launching SAS Viya Orders CLI:
 * Using [Docker](https://www.docker.com/) (assumes you have already executed the Docker build step described
  in the [Installation section](#installation)): <br>
    ```docker
-   docker run viya4-orders-cli
+   docker run viya4-orders-cli -v /my/local/path:/containerdir viya4-orders-cli [command] [args] [flags]
    ```
-
+  
 * Using `go run`: <br>
    ```
    go run main.go [command] [args] [flags]
@@ -123,20 +126,22 @@ You have the following options for launching SAS Viya Orders CLI:
 The examples in this section correspond to typical tasks that you might 
 perform using SAS Viya Orders API:
 
-* Get deployment assets for the initial deployment of SAS Viya order 923456, at the latest version of the Long Term 
-Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depassets.tgz`: <br>
-
-   ```
-   go run main.go dep 923456 lts -p ./sas -n 923456_lts_depassets
-   ```
-
+* Using config file `/c/Users/auser/vocli/.viya4-orders-cli.yaml`, get deployment assets for SAS Viya order 923456 at 
+the latest version of the Long Term Support (`lts`) cadence, with the contents going to file 
+`/c/Users/auser/vocli/sasfiles/923456_lts_depassets.tgz`: <br>
+     ```docker
+    docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \
+      --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets
+     ```
+  
    Sample output: <br>
      
    ```text
+    2020/10/02 19:16:30 Using config file: /sasstuff/.viya4-orders-cli.yaml
     OrderNumber: 923456
     AssetName: deploymentAssets
     AssetReqURL: https://api.sas.com/mysas/orders/923456/cadenceNames/lts/deploymentAssets
-    AssetLocation: ./sas/923456_lts_depassets.tgz
+    AssetLocation: /sasstuff/sasfiles/923456_lts_depassets.tgz
     Cadence: Long Term Support 2020.0
     CadenceRelease: 20200808.1596943588306
    ```
@@ -144,7 +149,7 @@ Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depas
 * Get a renewal license to apply to the deployment of SAS Viya order 923456 from above, with the contents going to file 
 `./sas/923456_lts_2020.0_license_ren1.jwt`: <br>
    
-    ```
+    ```go
       go run main.go lic 923456 lts 2020.0 -p ./sas -n 923456_lts_2020.0_license_ren1
     ```
    
@@ -161,7 +166,7 @@ Support (`lts`) cadence, with the contents going to file `./sas/923456_lts_depas
   
 * Get certificates for SAS Viya order 923457: <br>
    
-   ```
+   ```go
    go run main.go cer 923457 -p ./sas -n 923457_certs -o json
    ``` 
    
