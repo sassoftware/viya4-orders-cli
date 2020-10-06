@@ -36,20 +36,42 @@ Flags:
 Use "viya4-orders-cli [command] --help" for more information about a command.
 ```
 ### Prerequisites
-
 * [Go](https://golang.org/) 1.13 or [Docker](https://www.docker.com/) is required.
+* [git](https://git-scm.com/) version 2 or later is required.
 * API credentials for the [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
 are required. You can obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
 
 ### Installation
+#### Option 1 - Download a pre-built binary file
+Windows, Mac OS, and Linux binaries are available as downloads from 
+https://github.com/sassoftware/viya4-orders-cli/releases (expand Assets under the release of interest).
+
+#### Option 2 - Build the project yourself
 To build the project, you have several options:
 
 * Using [Make](https://www.gnu.org/software/make/): <br>
-  * Clone the project from the GitHub repo. Then, from the project root:
+  * Clone the project from the GitHub repo. Then, from the project root you can:
+    * Build a Windows executable (viya4-orders-cli_windows_amd64.exe):
     ```
-    make build
+      make win
     ```
-
+    * Build a Linux executable (viya4-orders-cli_linux_amd64.exe):
+    ```
+      make linux
+    ```    
+    * Build a Mac OS executable (viya4-orders-cli_darwin_amd64.exe):
+    ```
+      make darwin
+    ```  
+    * Build all of the above executables:
+     ```
+       make build
+     ```   
+    * Remove all of the above executables:
+     ```
+       make clean
+     ```    
+    
 * Using [Docker](https://www.docker.com/): <br>
   * You can build the project without cloning first:<br/><br/>
     http:
@@ -67,25 +89,13 @@ To build the project, you have several options:
 * Using `go build`: <br>
   * Clone the project from the GitHub repo. Then, from the project root:
     ```
-    go build -o viya4-orders-cli main.go
+    go build -o {executable file name} main.go
     ```
 
 ## Getting Started
 If you do not yet have credentials for [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html), 
 obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
 
-If you intend to use Make, edit your local copy of the makefile to add the command and order number, plus other 
-arguments you may need that are described in the [Overview](#Overview) section.
-
-Select CLI options. You can then specify them on the command line, pass them in
-  as environment variables, or include them in a config file.
-
-  SAS Viya Orders CLI options are applied in order of precedence, as follows:
-  1. command-line specification
-  1. environment variable specification
-  1. config file specification
-  1. default
-  
 Base64 encode the OAuth client ID and client secret that serve as your API credentials and define 
 them in your config file as `clientCredentialsId` and `clientCredentialsSecret`, respectively. Alternatively, you 
 can define them as environment variables.
@@ -96,9 +106,18 @@ Example of the correct way to encode from a Linux command prompt:<br/>
 Example of the incorrect way to encode from a Linux command prompt (encoded result will include \n):<br/>
  `echo {secret} | base64 --encode`
 
+Select CLI options. You can then specify them on the command line, pass them in
+  as environment variables, or include them in a config file.
+
+  SAS Viya Orders CLI options are applied in order of precedence, as follows:
+  1. command-line specification
+  1. environment variable specification
+  1. config file specification
+  1. default
+  
 If you want to use a config file, create it. The default config file location is `$HOME/.viya4-orders-cli`, but you 
-can put the file anywhere you want as long as you use the --config option to inform the CLI of its whereabouts if not 
-in the default location. The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
+can put the file anywhere you want as long as you use the `--config` / `-c` option to inform the CLI of its whereabouts 
+if not in the default location. The config file must be in [YAML](https://yaml.org/) format, or else its file name must 
 include a file extension that denotes another format. Supported formats are [JSON](https://www.json.org/), 
 [TOML](https://github.com/toml-lang/toml), [YAML](https://yaml.org/), [HCL](https://github.com/hashicorp/hcl), 
 [INI](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms717987(v=vs.85)), 
@@ -112,13 +131,11 @@ clientCredentialsSecret: 4D5e6F==
 ```
 
 ### Running
-
 You have the following options for launching SAS Viya Orders CLI:
 
-* Using [Make](https://www.gnu.org/software/make/): <br>
-  * If you haven't already, clone the project from the GitHub repo. Then, from the project root:
-   ```unix
-   make run
+* Run the executable that you downloaded or built above in the [Installation section](#installation):
+   ```
+   {executable file name} [command] [args] [flags]
    ```
 
 * Using [Docker](https://www.docker.com/) (assumes you have already executed the Docker build step described
@@ -134,12 +151,11 @@ You have the following options for launching SAS Viya Orders CLI:
    ```
 
 ### Examples
-
 The examples in this section correspond to typical tasks that you might 
 perform using SAS Viya Orders CLI:
 
-* Using config file `/c/Users/auser/vocli/.viya4-orders-cli.yaml`, get deployment assets for SAS Viya order 923456 at 
-the latest version of the Long Term Support (`lts`) cadence, with the contents going to file 
+* Using config file `/c/Users/auser/vocli/.viya4-orders-cli.yaml` to convey your API credentials, get deployment assets 
+for SAS Viya order `923456` at the latest version of the Long Term Support (`lts`) cadence, with the contents going to file 
 `/c/Users/auser/vocli/sasfiles/923456_lts_depassets.tgz`: <br>
      ```docker
     docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \
@@ -158,11 +174,11 @@ the latest version of the Long Term Support (`lts`) cadence, with the contents g
     CadenceRelease: 20200808.1596943588306
    ```
    
-* Get a renewal license to apply to the deployment of SAS Viya order 923456 from above, with the contents going to file 
-`./sas/923456_lts_2020.0_license_ren1.jwt`: <br>
+* Get a renewal license to apply to the deployment of SAS Viya order `923456` from above, with the contents going to file 
+`/auser/vocli/sasfiles/923456_lts_2020.0_license_ren1.jwt`: <br>
    
     ```go
-      go run main.go lic 923456 lts 2020.0 -p ./sas -n 923456_lts_2020.0_license_ren1
+      go run main.go lic 923456 lts 2020.0 -p /auser/vocli/sasfiles -n 923456_lts_2020.0_license_ren1
     ```
    
    Sample output: <br>
@@ -171,15 +187,16 @@ the latest version of the Long Term Support (`lts`) cadence, with the contents g
     OrderNumber: 923456
     AssetName: license
     AssetReqURL: https://api.sas.com/mysas/orders/923456/cadenceNames/lts/cadenceVersions/2020.0/license
-    AssetLocation: ./sas/923456_lts_2020.0_license_ren1.jwt
+    AssetLocation: /auser/vocli/sasfiles/923456_lts_2020.0_license_ren1.jwt
     Cadence: Long Term Support 2020.0
     CadenceRelease:
    ```
   
-* Get certificates for SAS Viya order 923457: <br>
+* Get certificates for SAS Viya order `923457`, with the contents going to file 
+`C:\Users\auser\vocli\sasfiles\923457_certs.zip` and the output in JSON format:<br>
    
-   ```go
-   go run main.go cer 923457 -p ./sas -n 923457_certs -o json
+   ```
+   viya4-orders-cli_windows_amd64.exe cer 923457 -p C:\Users\auser\vocli\sasfiles -n 923457_certs -o json
    ``` 
    
    Sample output: <br>
@@ -189,7 +206,7 @@ the latest version of the Long Term Support (`lts`) cadence, with the contents g
         "orderNumber": "923457",
         "assetName": "certificates",
         "assetReqURL": "https://api.sas.com/mysas/orders/923457/certificates",
-        "assetLocation": "./sas/923457_certs.zip",
+        "assetLocation": "C:\Users\auser\vocli\sasfiles\923457_certs.zip",
         "cadence": "",
         "cadenceRelease": ""
    }

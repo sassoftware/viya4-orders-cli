@@ -19,9 +19,12 @@ var cfgFile string
 var outFormat string
 var token string
 
+// Version is set by the build.
+var version string
+
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
-	Version: "1.1",
+	Version: version,
 	Use:   "viya4-orders-cli",
 	Short: "SAS Viya Orders CLI is a CLI to the SAS Viya Orders API",
 }
