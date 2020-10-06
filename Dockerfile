@@ -1,4 +1,3 @@
-#TODO: Don't run as root??
 FROM golang:1.13 AS builder
 
 WORKDIR /gobuild
