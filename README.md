@@ -244,12 +244,12 @@ using SAS Viya Orders CLI:
 
   Sample output:
 
-  ```json
+  ```
   {
       "orderNumber": "923457",
       "assetName": "certificates",
       "assetReqURL": "https://api.sas.com/mysas/orders/923457/certificates",
-      "assetLocation": "C:\\Users\\auser\\vocli\\sasfiles\\923457_certs.zip",
+      "assetLocation": "C:\Users\auser\vocli\sasfiles\923457_certs.zip",
       "cadence": "",
       "cadenceRelease": ""
   }
