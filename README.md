@@ -80,12 +80,15 @@ To build the project, you have several options:
     ```
     make darwin
     ```
-  - Build all of the above executables and run the following command:
-    `make build` Remove all of the above executables by running the following
+  - Build all of the above executables by running the following command:
+    ```
+    make build 
+    ```
+    Remove all of the above executables by running the following
     command:
-  ```
-  make clean
-  ```
+    ```
+    make clean
+    ```
 - Using [Docker](https://www.docker.com/): <br> You can build the project
   without cloning first:<br/><br/>
   - http:
@@ -195,8 +198,9 @@ using SAS Viya Orders CLI:
   `923456` at the latest version of the Long Term Support (`lts`) cadence. Send
   the contents to file `/c/Users/auser/vocli/sasfiles/923456_lts_depassets.tgz`:
   <br>
-
-  `docker docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \ --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets `
+  ```docker
+  docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \ --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets
+  ```
 
   Sample output:
 
@@ -215,7 +219,7 @@ using SAS Viya Orders CLI:
   `/auser/vocli/sasfiles/923456_lts_2020.0_license_ren1.jwt`:
 
   ```go
-       go run main.go lic 923456 lts 2020.0 -p /auser/vocli/sasfiles -n 923456_lts_2020.0_license_ren1
+  go run main.go lic 923456 lts 2020.0 -p /auser/vocli/sasfiles -n 923456_lts_2020.0_license_ren1
   ```
 
   Sample output: <br>
@@ -239,7 +243,7 @@ using SAS Viya Orders CLI:
 
   Sample output:
 
-  ```
+  ```json
   {
       "orderNumber": "923457",
       "assetName": "certificates",
