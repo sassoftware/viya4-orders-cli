@@ -199,7 +199,8 @@ using SAS Viya Orders CLI:
   the contents to file `/c/Users/auser/vocli/sasfiles/923456_lts_depassets.tgz`:
   <br>
   ```docker
-  docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \ --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets
+  docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \ 
+   --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets
   ```
 
   Sample output:
