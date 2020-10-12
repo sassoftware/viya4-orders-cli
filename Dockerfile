@@ -24,7 +24,7 @@ FROM scratch
 COPY --from=builder /viya4-orders-cli /usr/bin/viya4-orders-cli
 
 # Copy certs that we installed earlier in.
-COPY --from=certAdder /etc/ssl/certs/* /etc/ssl/certs/
+COPY --from=certAdder /etc/ssl/certs /etc/ssl/certs
 
 ENTRYPOINT ["/usr/bin/viya4-orders-cli"]
 CMD ["--help"]
