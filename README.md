@@ -65,8 +65,8 @@ To build the project, you have several options:
 
 - Using [Make](https://www.gnu.org/software/make/): <br> Clone the project from
   the GitHub repo. Then, from the project root you can do the following:
-  - Build a Windows executable (viya4-orders-cli_windows_amd64.exe) by running the
-    following command:
+  - Build a Windows executable (viya4-orders-cli_windows_amd64.exe) by running
+    the following command:
     ```
     make win
     ```
@@ -82,10 +82,9 @@ To build the project, you have several options:
     ```
   - Build all of the above executables by running the following command:
     ```
-    make build 
+    make build
     ```
-    Remove all of the above executables by running the following
-    command:
+    Remove all of the above executables by running the following command:
     ```
     make clean
     ```
@@ -118,17 +117,21 @@ Take the following steps to start using SAS Viya Orders CLI:
    [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html),
    obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
 
-1. Base64 encode the OAuth client ID and client secret that serve as your API
-   credentials and define them in your configuration file as
-   `clientCredentialsId` and `clientCredentialsSecret`, respectively. Or as an
-   alternative, you can define them as environment variables.
-
+1. Record the `Key` and the `Secret` values that serve as your API credentials.
+1. Base64 encode each value.
    > **NOTE:** When base64 encoding the credentials, take care not to encode
    > end-of-line characters into the result. <br/> Here is an example of the
-   > correct way to encode from a Linux command prompt:<br/>
+   > correct way to encode from a Linux command prompt:<br/> >
    > `echo -n {secret} | base64 --encode`<br/><br/> Here is an example of the
    > _incorrect_ way to encode from a Linux command prompt (the encoded result
    > will include `\n`):<br/> `echo {secret} | base64 --encode`
+1. Add both credentials to your configuration file, or define them as
+   environment variables:
+
+   - Assign the encoded value of `Key` to `clientCredentialsId` (if using environment variables, use
+    `CLIENTCREDENTIALSID`).
+   - Assign the encoded value of `Secret` to `clientCredentialsSecret` (if using environment variables, use
+    `CLIENTCREDENTIALSSECRET`).
 
 1. Select CLI options. You can then specify them on the command line, pass them
    in as environment variables, or include them in a configuration file.
@@ -167,7 +170,7 @@ clientCredentialsSecret: 4D5e6F==
 
 You have the following options for launching SAS Viya Orders CLI:
 
-- Run the executable that you downloaded or built above in the
+- Running the executable that you downloaded or built previously in the
   [Installation](#installation) section:
 
   ```
@@ -193,13 +196,14 @@ You have the following options for launching SAS Viya Orders CLI:
 The examples in this section correspond to typical tasks that you might perform
 using SAS Viya Orders CLI:
 
-- Using a configuration file, `/c/Users/auser/vocli/.viya4-orders-cli.yaml`,
-  to convey your API credentials, get deployment assets for SAS Viya order
-  `923456` at the latest version of the Long Term Support (`lts`) cadence. Send
-  the contents to file `/c/Users/auser/vocli/sasfiles/923456_lts_depassets.tgz`:
+- Using a configuration file, `/c/Users/auser/vocli/.viya4-orders-cli.yaml`, to
+  convey your API credentials, get deployment assets for SAS Viya order `923456`
+  at the latest version of the Long Term Support (`lts`) cadence. Send the
+  contents to file `/c/Users/auser/vocli/sasfiles/923456_lts_depassets.tgz`:
   <br>
+
   ```docker
-  docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \ 
+  docker run -v /c/Users/auser/vocli:/sasstuff viya4-orders-cli deploymentAssets 923456 lts \
    --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets
   ```
 
