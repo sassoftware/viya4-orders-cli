@@ -6,10 +6,10 @@ package authn
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -29,15 +29,15 @@ type apigeeToken struct {
 }
 
 // GetBearerToken calls the /token API endpoint to exchange client credentials for a Bearer token.
-func GetBearerToken() string {
+func GetBearerToken() (token string, err error) {
 	data := url.Values{}
 	id, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsId"))
 	if err != nil {
-		log.Panic("Error decoding clientCredentialsId: " + err.Error())
+		return token, errors.New("ERROR: attempt to decode clientCredentialsId failed: " + err.Error())
 	}
 	sec, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsSecret"))
 	if err != nil {
-		log.Panic("Error decoding clientCredentialsSecret: " + err.Error())
+		return token, errors.New("ERROR: attempt to decode clientCredentialsSecret failed: " + err.Error())
 	}
 	data.Set("client_id", string(id))
 	data.Set("client_secret", string(sec))
@@ -46,7 +46,7 @@ func GetBearerToken() string {
 	// Build the request URL.
 	u, err := url.ParseRequestURI(viyaOrdersAPIHost)
 	if err != nil {
-		log.Panic("Error parsing Bearer token request URI: " + err.Error())
+		return token, errors.New("ERROR: attempt to parse Bearer token request URI failed: " + err.Error())
 	}
 
 	var b strings.Builder
@@ -58,35 +58,38 @@ func GetBearerToken() string {
 	client := &http.Client{}
 	r, err := http.NewRequest("POST", urlStr, strings.NewReader(data.Encode()))
 	if err != nil {
-		log.Panic("Error setting up Bearer token request: " + err.Error())
+		return token, errors.New("ERROR: setup of Bearer token request failed: " + err.Error())
 	}
 	r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	r.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
 
 	resp, err := client.Do(r)
 	if err != nil {
-		log.Panic("Error on Bearer token request: " + err.Error())
+		return token, errors.New("ERROR: Bearer token request failed to complete: " + err.Error())
 	}
 
 	// Get the response.
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Panic("Error reading response body from Bearer token request: " + err.Error())
+		return token, errors.New("ERROR: read of response body from Bearer token request failed: " + err.Error())
 	}
 	if resp.StatusCode != http.StatusOK {
-		var em = fmt.Sprintf("Bearer token request returned: %d -- %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+		var em = "ERROR: Bearer token request failed: "
+		var emErr string
 		if body != nil && len(body) > 0 {
-			em += fmt.Sprintf(". Error: %s", string(body))
+			emErr = fmt.Sprintf("%s", string(body))
+		} else {
+			emErr = fmt.Sprintf("%d -- %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		}
-		log.Panic(em)
+		return token, errors.New(em+emErr)
 	}
 
 	var apigeeToken apigeeToken
 	err = json.Unmarshal(body, &apigeeToken)
 	if err != nil {
-		log.Panic("Error unmarshalling token API token response: " + err.Error())
+		return token, errors.New("ERROR: unmarshalling of token API response failed: " + err.Error())
 	}
 
-	return apigeeToken.AccessToken
+	return apigeeToken.AccessToken, nil
 }

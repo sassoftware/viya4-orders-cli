@@ -1,11 +1,12 @@
-//Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
-//SPDX-License-Identifier: Apache-2.0
+// Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package cmd
 
 import (
 	"github.com/sassoftware/viya4-orders-cli/lib/assetreqs"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 // licenseCmd represents the license command
@@ -18,7 +19,10 @@ var licenseCmd = &cobra.Command{
 	Args: cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
 		ar := assetreqs.New(token, "license", args[0], args[1], args[2], assetFilePath, assetFileName, outFormat)
-		ar.GetAsset()
+		err := ar.GetAsset()
+		if err != nil {
+			log.Fatalln(err)
+		}
 	},
 }
 

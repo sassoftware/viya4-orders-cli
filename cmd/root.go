@@ -4,7 +4,6 @@
 package cmd
 
 import (
-	"fmt"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sassoftware/viya4-orders-cli/lib/authn"
 	"github.com/spf13/cobra"
@@ -33,7 +32,7 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Panic(err.Error())
+		os.Exit(1)
 	}
 }
 
@@ -63,7 +62,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			log.Panic(err.Error())
+			log.Fatalln("ERROR: homedir.Dir() returned: " + err.Error())
 		}
 
 		// Search config in home directory with name ".viya4-orders-cli" (without extension).
@@ -77,15 +76,15 @@ func initConfig() {
 	err := viper.ReadInConfig()
 	if err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			log.Panic(err.Error())
+			log.Fatalln("ERROR: problem parsing config file " + viper.ConfigFileUsed() + ": " + err.Error())
 		}
 	}
 
 	if outFormat != "j" && outFormat != "json" {
 		if viper.ConfigFileUsed() != "" {
-			log.Println("Using config file:", viper.ConfigFileUsed())
+			log.Println("INFO: using config file:", viper.ConfigFileUsed())
 		} else {
-			log.Println("No config file found")
+			log.Println("INFO: no config file found")
 		}
 	}
 
@@ -93,8 +92,9 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	// Bind flags from the command line to the Viper framework.
-	if err := viper.BindPFlags(rootCmd.Flags()); err != nil {
-		log.Panic(err)
+	err = viper.BindPFlags(rootCmd.Flags())
+	if err != nil {
+		log.Fatalln("ERROR: viper.BindPFlags() returned: " + err.Error())
 	}
 
 	setOptions()
@@ -121,17 +121,20 @@ func setOptions() {
 	outFormat := viper.GetString("output")
 	// Validate output flag value.
 	if outFormat != "text" && outFormat != "t" && outFormat != "json" && outFormat != "j" {
-		usageError("Invalid value " + outFormat + " specified for -o, --output option!")
+		usageError("invalid value " + outFormat + " specified for -o, --output option!")
 	}
 }
 
 func usageError(message string) {
+	log.Fatalln("Error: " + message)
 	rootCmd.Help()
-	fmt.Println("Error: " + message)
-	os.Exit(1)
 }
 
 // Get Bearer token.
 func auth() {
-	token = authn.GetBearerToken()
+	var err error
+	token, err = authn.GetBearerToken()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 }
