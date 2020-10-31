@@ -69,7 +69,15 @@ func GetBearerToken() (token string, err error) {
 	}
 
 	// Get the response.
-	defer resp.Body.Close()
+
+	defer func() {
+		rbcErr := resp.Body.Close()
+		if rbcErr != nil {
+			err = rbcErr
+		}
+	}()
+
+	//defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return token, errors.New("ERROR: read of response body from Bearer token request failed: " + err.Error())

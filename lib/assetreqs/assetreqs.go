@@ -208,7 +208,15 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 	}
 
 	// Handle the response
-	defer resp.Body.Close()
+
+	defer func() {
+		rbcErr := resp.Body.Close()
+		if rbcErr != nil {
+			err = rbcErr
+		}
+	}()
+
+	//defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -236,7 +244,15 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 	if err != nil {
 		return fileName, errors.New("ERROR: attempt to create output file " + fileName + " failed: " + err.Error())
 	}
-	defer out.Close()
+
+	defer func() {
+		ocErr := out.Close()
+		if ocErr != nil {
+			err = ocErr
+		}
+	}()
+
+	//defer out.Close()
 	_, err = io.Copy(out, resp.Body)
 	if err != nil {
 		return fileName, errors.New("ERROR: io.Copy() returned: " + err.Error() +
@@ -260,7 +276,13 @@ func (ar AssetReq) getCadenceInfo(file string) (string, string, error) {
 	if err != nil {
 		return "", "", errors.New("ERROR: attempt to open " + file + " failed: " + err.Error())
 	}
-	defer f.Close()
+
+	defer func() {
+		fcErr := f.Close()
+		if fcErr != nil {
+			err = fcErr
+		}
+	}()
 
 	gzf, err := gzip.NewReader(f)
 	if err != nil {
