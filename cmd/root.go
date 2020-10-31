@@ -126,8 +126,11 @@ func setOptions() {
 }
 
 func usageError(message string) {
-	log.Fatalln("Error: " + message)
-	rootCmd.Help()
+	println("Error: " + message)
+	err := rootCmd.Help()
+	if err != nil {
+		log.Fatalln("ERROR: rootCmd.Help() returned " + err.Error())
+	}
 }
 
 // Get Bearer token.

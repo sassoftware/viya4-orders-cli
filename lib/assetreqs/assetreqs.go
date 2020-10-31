@@ -217,8 +217,8 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 		}
 		var em = "ERROR: asset request failed: "
 		var emErr string
-		if body != nil && len(body) > 0 {
-			emErr = fmt.Sprintf("%s", string(body))
+		if len(body) > 0 {
+			emErr = string(body)
 		} else {
 			emErr = fmt.Sprintf("%d -- %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		}
@@ -237,7 +237,11 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 		return fileName, errors.New("ERROR: attempt to create output file " + fileName + " failed: " + err.Error())
 	}
 	defer out.Close()
-	io.Copy(out, resp.Body)
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		return fileName, errors.New("ERROR: io.Copy() returned: " + err.Error() +
+			" on attempt to write to " + fileName)
+	}
 
 	return fileName, nil
 }
@@ -264,7 +268,7 @@ func (ar AssetReq) getCadenceInfo(file string) (string, string, error) {
 	}
 
 	tarReader := tar.NewReader(gzf)
-	for true {
+	for {
 		header, err := tarReader.Next()
 		if err == io.EOF {
 			return "", "", errors.New("ERROR: end of file reached in " + file + " before cadence information found")
@@ -283,8 +287,6 @@ func (ar AssetReq) getCadenceInfo(file string) (string, string, error) {
 			return cVal, cRel, nil
 		}
 	}
-
-	return "", "", errors.New("ERROR: unable to extract cadence from " + checksumsFile)
 }
 
 // Find and return the cadence information in the given byte array

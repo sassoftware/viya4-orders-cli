@@ -77,8 +77,8 @@ func GetBearerToken() (token string, err error) {
 	if resp.StatusCode != http.StatusOK {
 		var em = "ERROR: Bearer token request failed: "
 		var emErr string
-		if body != nil && len(body) > 0 {
-			emErr = fmt.Sprintf("%s", string(body))
+		if len(body) > 0 {
+			emErr = string(body)
 		} else {
 			emErr = fmt.Sprintf("%d -- %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		}
