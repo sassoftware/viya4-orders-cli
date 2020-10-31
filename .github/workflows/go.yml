@@ -36,8 +36,17 @@ jobs:
     - name: Test
       run: go test -v .
 
-    - name: Run golangci-lint
-      # You may pin to the exact commit or the version.
-      # uses: golangci/golangci-lint-action@04eca2038305127fb1e6683425b6864cd5612f2d
-      uses: golangci/golangci-lint-action@v1.2.1
-      
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v2
+      with:
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: v1.29
+
+          # Optional: working directory, useful for monorepos
+          # working-directory: somedir
+
+          # Optional: golangci-lint command line arguments.
+          # args: --issues-exit-code=0
+
+          # Optional: show only new issues if it's a pull request. The default value is `false`.
+          # only-new-issues: true
