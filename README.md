@@ -124,7 +124,7 @@ Take the following steps to start using SAS Viya Orders CLI:
    > correct way to encode from a Linux command prompt:<br/>
    > `echo -n {secret} | base64 --encode`<br/><br/> Here is an example of the
    > _incorrect_ way to encode from a Linux command prompt (the encoded result
-   > will include `\n`):<br/> `echo {secret} | base64 --encode`
+   > will include `\n`):<br/> `echo {secret} | base64`
 1. Add both credentials to your configuration file, or define them as
    environment variables:
 
@@ -181,7 +181,7 @@ You have the following options for launching SAS Viya Orders CLI:
   step described in the [Installation](#installation) section): <br>
 
   ```docker
-  docker run viya4-orders-cli -v /my/local/path:/containerdir viya4-orders-cli [command] [args] [flags]
+  docker run -v /my/local/path:/containerdir viya4-orders-cli [command] [args] [flags]
   ```
 
 - Using `go run`: <br> If you have not done so already, clone the project from
