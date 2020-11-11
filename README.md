@@ -122,7 +122,7 @@ Take the following steps to start using SAS Viya Orders CLI:
    > **NOTE:** When base64 encoding the credentials, take care not to encode
    > end-of-line characters into the result. <br/> Here is an example of the
    > correct way to encode from a Linux command prompt:<br/>
-   > `echo -n {secret} | base64 --encode`<br/><br/> Here is an example of the
+   > `echo -n {secret} | base64`<br/><br/> Here is an example of the
    > _incorrect_ way to encode from a Linux command prompt (the encoded result
    > will include `\n`):<br/> `echo {secret} | base64`
 1. Add both credentials to your configuration file, or define them as
