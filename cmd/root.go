@@ -24,8 +24,8 @@ var version string
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Version: version,
-	Use:   "viya4-orders-cli",
-	Short: "SAS Viya Orders CLI is a CLI to the SAS Viya Orders API",
+	Use:     "viya4-orders-cli",
+	Short:   "SAS Viya Orders CLI is a CLI to the SAS Viya Orders API",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -36,6 +36,7 @@ func Execute() {
 	}
 }
 
+// init performs setup tasks.
 func init() {
 	// Authentication is required for all commands.
 	cobra.OnInitialize(initConfig, auth)
@@ -100,8 +101,8 @@ func initConfig() {
 	setOptions()
 }
 
-// Get option values from Viper and validate where appropriate. In general, those options set on the command line override those set
-// in the environment which override those set in the config.
+// setOptions gets option values from Viper and validates them where appropriate. In general,
+// those options set on the command line override those set in the environment which override those set in the config.
 func setOptions() {
 	assetFileName = viper.GetString("file-name")
 	assetFilePath = viper.GetString("file-path")
@@ -125,6 +126,7 @@ func setOptions() {
 	}
 }
 
+// usageError prints the given error followed by the help text.
 func usageError(message string) {
 	println("Error: " + message)
 	err := rootCmd.Help()
@@ -133,7 +135,7 @@ func usageError(message string) {
 	}
 }
 
-// Get Bearer token.
+// auth gets the Bearer token.
 func auth() {
 	var err error
 	token, err = authn.GetBearerToken()

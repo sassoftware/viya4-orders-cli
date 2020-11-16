@@ -1,5 +1,7 @@
 // Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
+
+// Package assetreqs provides a method to request an order asset and receive printed information to STDOUT about it.
 package assetreqs
 
 import (
@@ -20,11 +22,15 @@ import (
 	"strings"
 )
 
+// checksumsFile is where we can find cadence information within downloaded deployment assets.
 const checksumsFile string = "sas-bases/checksums.txt"
-const viyaOrdersAPIHost string = "https://api.sas.com"
-const viyaOrdersAPIBasePath string = "/mysas"
-const viyaOrdersAPIOrdersPath string = "/orders"
+const (
+	viyaOrdersAPIHost       string = "https://api.sas.com"
+	viyaOrdersAPIBasePath   string = "/mysas"
+	viyaOrdersAPIOrdersPath string = "/orders"
+)
 
+// AssetReq provides fields that define the parameters of an order asset request.
 type AssetReq struct {
 	token string
 	aName string
@@ -36,6 +42,7 @@ type AssetReq struct {
 	oFmt  string
 }
 
+// New initializes an AssetReq struct.
 func New(token string, assetName string, orderNum string, cadenceName string, cadenceVer string, filePath string,
 	fileName string, outputFormat string) (ar AssetReq) {
 	return AssetReq{
@@ -51,15 +58,19 @@ func New(token string, assetName string, orderNum string, cadenceName string, ca
 }
 
 var output out
+
+// out defines the information that is printed to STDOUT.
 type out struct {
-	OrderNumber  			string	`json:"orderNumber"`
-	AssetName 				string	`json:"assetName"`
-	AssetReqURL 			string	`json:"assetReqURL"`
-	AssetLocation			string	`json:"assetLocation"`
-	Cadence					string	`json:"cadence"`
-	CadenceRelease  		string	`json:"cadenceRelease"`
+	OrderNumber    string `json:"orderNumber"`
+	AssetName      string `json:"assetName"`
+	AssetReqURL    string `json:"assetReqURL"`
+	AssetLocation  string `json:"assetLocation"`
+	Cadence        string `json:"cadence"`
+	CadenceRelease string `json:"cadenceRelease"`
 }
 
+// GetAsset fetches the requested order asset (as defined in the AssetReq receiver) from the SAS Viya Orders API and
+// prints information about it.
 func (ar AssetReq) GetAsset() error {
 	// Make the API call to download the requested asset
 	fileName, err := ar.makeReq()
@@ -67,8 +78,8 @@ func (ar AssetReq) GetAsset() error {
 		return err
 	}
 
-	// Set the output struct properties
-	// Cadence is only applicable to deploymentAssets and license
+	// Set the output struct properties.
+	// Cadence is only applicable to deploymentAssets and license.
 	if ar.aName == "deploymentAssets" || ar.aName == "license" {
 		output.Cadence, output.CadenceRelease, err = ar.getCadenceInfo(fileName)
 		if err != nil {
@@ -88,7 +99,7 @@ func (ar AssetReq) GetAsset() error {
 	return nil
 }
 
-// Determine the location where the asset will be saved on disk
+// getFileName determines the location where the asset will be saved on disk.
 func (ar AssetReq) getFileName(contentDisp string) (fileName string, err error) {
 	var filePath string
 	if ar.fPath != "" {
@@ -117,7 +128,7 @@ func (ar AssetReq) getFileName(contentDisp string) (fileName string, err error) 
 	return fileName, nil
 }
 
-// Print contents of the output struct in the format specified by the caller
+// printOutput prints the contents of the output struct in the format specified by the caller.
 func (ar AssetReq) printOutput() (err error) {
 	if strings.ToLower(ar.oFmt) == "json" || strings.ToLower(ar.oFmt) == "j" {
 		buff := new(bytes.Buffer)
@@ -142,7 +153,7 @@ func (ar AssetReq) printOutput() (err error) {
 	return nil
 }
 
-// Build HTTP request
+// buildReq builds an HTTP request.
 func (ar AssetReq) buildReq() (req *http.Request, err error) {
 	reqURL, err := ar.buildURL()
 	if err != nil {
@@ -155,12 +166,12 @@ func (ar AssetReq) buildReq() (req *http.Request, err error) {
 	if err != nil {
 		return req, errors.New("ERROR: setup of asset request failed: " + err.Error())
 	}
-	req.Header.Add("Authorization", bearer)
+	req.Header.Set("Authorization", bearer)
 
 	return req, nil
 }
 
-// Build request URL
+// buildURL builds the request URL.
 func (ar AssetReq) buildURL() (urlStr string, err error) {
 	u, err := url.ParseRequestURI(viyaOrdersAPIHost)
 	if err != nil {
@@ -193,30 +204,23 @@ func (ar AssetReq) buildURL() (urlStr string, err error) {
 	return urlStr, nil
 }
 
-// Make HTTP request and return the name of the file where the requested asset was saved
+// makeReq makes an HTTP request for an order asset and returns the name of the file where the requested asset was saved.
 func (ar AssetReq) makeReq() (fileName string, err error) {
 	req, err := ar.buildReq()
 	if err != nil {
 		return fileName, err
 	}
 
-	// Send the request
+	// Send the request.
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return fileName, errors.New("ERROR: asset request failed to complete: " + err.Error())
 	}
 
-	// Handle the response
+	// Handle the response.
 
-	defer func() {
-		rbcErr := resp.Body.Close()
-		if rbcErr != nil {
-			err = rbcErr
-		}
-	}()
-
-	//defer resp.Body.Close()
+	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -230,29 +234,22 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 		} else {
 			emErr = fmt.Sprintf("%d -- %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		}
-		return fileName, errors.New(em+emErr)
+		return fileName, errors.New(em + emErr)
 	}
 
-	// Determine where on disk we will save the asset
+	// Determine where on disk we will save the asset.
 	fileName, err = ar.getFileName(resp.Header.Get("Content-Disposition"))
 	if err != nil {
 		return fileName, err
 	}
 
-	// Save asset to disk
+	// Save asset to disk.
 	out, err := os.Create(fileName)
 	if err != nil {
 		return fileName, errors.New("ERROR: attempt to create output file " + fileName + " failed: " + err.Error())
 	}
 
-	defer func() {
-		ocErr := out.Close()
-		if ocErr != nil {
-			err = ocErr
-		}
-	}()
-
-	//defer out.Close()
+	defer out.Close()
 	_, err = io.Copy(out, resp.Body)
 	if err != nil {
 		return fileName, errors.New("ERROR: io.Copy() returned: " + err.Error() +
@@ -262,9 +259,9 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 	return fileName, nil
 }
 
-// Get the cadence name, version, and release if applicable
+// getCadenceInfo gets the cadence name, version, and release, if applicable, for the retrieved order asset.
 func (ar AssetReq) getCadenceInfo(file string) (string, string, error) {
-	// Cadence release is only applicable to deployment assets
+	// Cadence release is only applicable to deployment assets.
 	if ar.aName == "license" {
 		return strings.Title(ar.cName) + " " + ar.cVer, "", nil
 	}
@@ -277,13 +274,7 @@ func (ar AssetReq) getCadenceInfo(file string) (string, string, error) {
 		return "", "", errors.New("ERROR: attempt to open " + file + " failed: " + err.Error())
 	}
 
-	defer func() {
-		fcErr := f.Close()
-		if fcErr != nil {
-			err = fcErr
-		}
-	}()
-
+	defer f.Close()
 	gzf, err := gzip.NewReader(f)
 	if err != nil {
 		return "", "", errors.New("ERROR: prepare to read " + file + " failed: " + err.Error())
@@ -311,7 +302,7 @@ func (ar AssetReq) getCadenceInfo(file string) (string, string, error) {
 	}
 }
 
-// Find and return the cadence information in the given byte array
+// extractCadence finds and returns the cadence information in the given byte array.
 func extractCadence(data []byte) (string, string) {
 	cLabelSt := bytes.Index(data, []byte("Cadence Display Name:"))
 	tempData := data[cLabelSt:]
@@ -327,5 +318,3 @@ func extractCadence(data []byte) (string, string) {
 
 	return cValue, cRel
 }
-
-

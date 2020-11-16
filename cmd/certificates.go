@@ -9,16 +9,16 @@ import (
 	"log"
 )
 
-// certsCmd represents the certs command
+// certificatesCmd represents the certificates command
 var certificatesCmd = &cobra.Command{
 	Use:   "certificates [order number]",
 	Short: "Download certificates for the given order number",
-	Example: "viya4-orders-cli certs 993456\n"+
+	Example: "viya4-orders-cli certs 993456\n" +
 		"viya4-orders-cli certs 993456 -p $HOME/sas",
 	Aliases: []string{"certs", "cer"},
-	Args: cobra.ExactArgs(1),
+	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ar := assetreqs.New(token, "certificates", args[0], "","",
+		ar := assetreqs.New(token, "certificates", args[0], "", "",
 			assetFilePath, assetFileName, outFormat)
 		err := ar.GetAsset()
 		if err != nil {

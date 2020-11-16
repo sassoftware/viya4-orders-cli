@@ -162,8 +162,8 @@ Take the following steps to start using SAS Viya Orders CLI:
 Here is a sample YAML configuration file that contains client credentials:
 
 ```
-clientCredentialsId: 1a2B3c=
-clientCredentialsSecret: 4D5e6F==
+clientCredentialsId: 1a2B3c4D5e6F7h8I9j10K=
+clientCredentialsSecret: 4D5e6F7g8H9i==
 ```
 
 ### Running
