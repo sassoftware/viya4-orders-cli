@@ -24,6 +24,7 @@ import (
 
 // checksumsFile is where we can find cadence information within downloaded deployment assets.
 const checksumsFile string = "sas-bases/checksums.txt"
+
 const (
 	viyaOrdersAPIHost       string = "https://api.sas.com"
 	viyaOrdersAPIBasePath   string = "/mysas"
@@ -161,7 +162,7 @@ func (ar AssetReq) buildReq() (req *http.Request, err error) {
 	}
 	output.AssetReqURL = reqURL
 
-	var bearer = "Bearer " + ar.token
+	bearer := "Bearer " + ar.token
 	req, err = http.NewRequest("GET", reqURL, nil)
 	if err != nil {
 		return req, errors.New("ERROR: setup of asset request failed: " + err.Error())
@@ -227,7 +228,7 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 			return fileName, errors.New("ERROR: ioutil.ReadAll() returned: " + err.Error() +
 				" on attempt to read response body from non-200 response code")
 		}
-		var em = "ERROR: asset request failed: "
+		em := "ERROR: asset request failed: "
 		var emErr string
 		if len(body) > 0 {
 			emErr = string(body)

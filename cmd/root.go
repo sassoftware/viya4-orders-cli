@@ -4,19 +4,23 @@
 package cmd
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sassoftware/viya4-orders-cli/lib/authn"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"log"
-	"os"
 )
 
-var assetFileName string
-var assetFilePath string
-var cfgFile string
-var outFormat string
-var token string
+var (
+	assetFileName string
+	assetFilePath string
+	cfgFile       string
+	outFormat     string
+	token         string
+)
 
 // Version is set by the build.
 var version string
@@ -25,7 +29,7 @@ var version string
 var rootCmd = &cobra.Command{
 	Version: version,
 	Use:     "viya4-orders-cli",
-	Short:   "SAS Viya Orders CLI is a CLI to the SAS Viya Orders API",
+	Short:   fmt.Sprintf("SAS Viya Orders CLI version %s -- a CLI to the SAS Viya Orders API", version),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

@@ -4,9 +4,10 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/sassoftware/viya4-orders-cli/lib/assetreqs"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 // certificatesCmd represents the certificates command

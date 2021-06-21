@@ -10,11 +10,12 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"net/url"
+	"strings"
+
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
-	"net/url"
-	"strings"
 )
 
 const (
@@ -48,7 +49,7 @@ func GetBearerToken() (token string, err error) {
 	u.Path = b.String()
 	urlStr := u.String()
 
-	var oauthCfg = &clientcredentials.Config{
+	oauthCfg := &clientcredentials.Config{
 		ClientID:     string(id),
 		ClientSecret: string(sec),
 		TokenURL:     urlStr,

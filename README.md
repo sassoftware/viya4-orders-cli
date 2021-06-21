@@ -43,13 +43,12 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 
 ### Prerequisites
 
-- [Go](https://golang.org/) 1.13 or [Docker](https://www.docker.com/) is
-  required.
-- [git](https://git-scm.com/) version 2 or later is required.
 - API credentials for the
   [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
   are required. You can obtain them from the
   [SAS API Portal](https://apiportal.sas.com/get-started).
+- [Go](https://golang.org/) 1.16 or [Docker](https://www.docker.com/) is required if you intend to build your own image.
+- [git](https://git-scm.com/) version 2 or later is required if you intend to clone the repository.
 
 ### Installation
 

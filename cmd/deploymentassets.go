@@ -4,9 +4,10 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/sassoftware/viya4-orders-cli/lib/assetreqs"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 // deploymentAssetsCmd represents the deploymentAssets command
@@ -20,7 +21,7 @@ var deploymentAssetsCmd = &cobra.Command{
 	Aliases: []string{"depassets", "dep"},
 	Args:    cobra.RangeArgs(2, 3),
 	Run: func(cmd *cobra.Command, args []string) {
-		var cver = ""
+		cver := ""
 		if len(args) == 3 {
 			cver = args[2]
 		}

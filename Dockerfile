@@ -1,6 +1,6 @@
 # Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
-FROM golang:1.13 AS builder
+FROM golang:1.16 AS builder
 
 WORKDIR /gobuild
 ENV CGO_ENABLED=0
@@ -9,7 +9,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -ldflags "-w -s" -o /viya4-orders-cli
+
+# Inject the current version so -v / --version will work.
+RUN go build -ldflags "-w -s -X github.com/sassoftware/viya4-orders-cli/cmd.version=$(git describe --tags --abbrev=0 --always)" -o /viya4-orders-cli
 
 # Install certs.
 FROM alpine:latest AS certAdder
