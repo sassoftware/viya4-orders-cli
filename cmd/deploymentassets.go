@@ -25,8 +25,11 @@ var deploymentAssetsCmd = &cobra.Command{
 		if len(args) == 3 {
 			cver = args[2]
 		}
-		ar := assetreqs.New(token, "deploymentAssets", args[0], args[1], cver, assetFilePath, assetFileName, outFormat)
-		err := ar.GetAsset()
+		ar, err := assetreqs.New(token, "deploymentAssets", args[0], args[1], cver, assetFilePath, assetFileName, outFormat)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		err = ar.GetAsset()
 		if err != nil {
 			log.Fatalln(err)
 		}

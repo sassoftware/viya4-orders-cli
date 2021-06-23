@@ -19,6 +19,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
@@ -45,7 +46,18 @@ type AssetReq struct {
 
 // New initializes an AssetReq struct.
 func New(token string, assetName string, orderNum string, cadenceName string, cadenceVer string, filePath string,
-	fileName string, outputFormat string) (ar AssetReq) {
+	fileName string, outputFormat string) (ar AssetReq, err error) {
+
+	// Do some preliminary validation of the order number.
+	valid, err := ordNumIsValidFmt(orderNum)
+	if err != nil {
+		return AssetReq{}, err
+	}
+	if !valid {
+		return AssetReq{},
+			errors.New("Given order number '" + orderNum + "' does not have the format of a valid order 	number.")
+	}
+
 	return AssetReq{
 		token: token,
 		aName: assetName,
@@ -55,7 +67,53 @@ func New(token string, assetName string, orderNum string, cadenceName string, ca
 		fPath: filePath,
 		fName: fileName,
 		oFmt:  outputFormat,
+	}, nil
+}
+
+func ordNumIsValidFmt(orderNum string) (v bool, err error) {
+	// Note: because of no look-ahead operator (?) in go regexp, this takes multiple evaluations.
+	// Make sure that the given order number has at least one number and at least one letter, contains only digits and
+	// letters, and is 6 characters long.
+
+	// Test length = 6.
+	if len(orderNum) != 6 {
+		return false, nil
 	}
+
+	// Length is correct - make sure it doesn't contain something other than letters or digits.
+	invalid, err := hasNonLetterOrNonDigit(orderNum)
+	if err != nil {
+		return false, err
+	}
+	if invalid {
+		// contains something other than letters and digits - invalid
+		return false, err
+	}
+
+	// Make sure it contains at least one letter.
+	v, err = hasLetter(orderNum)
+	if err != nil {
+		return false, err
+	}
+	if !v {
+		// doesn't contain a letter
+		return false, err
+	}
+
+	// Contains at least one letter - make sure it contains at least one digit.
+	return hasDigit(orderNum)
+}
+
+func hasLetter(str string) (bool, error) {
+	return regexp.Match("[a-zA-Z]+", []byte(str))
+}
+
+func hasDigit(str string) (bool, error) {
+	return regexp.Match("[\\d]+", []byte(str))
+}
+
+func hasNonLetterOrNonDigit(str string) (bool, error) {
+	return regexp.Match("[^a-zA-Z\\d]", []byte(str))
 }
 
 var output out

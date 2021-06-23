@@ -27,8 +27,8 @@ Flags:
   -c, --config string      config file (default is $HOME/.viya4-orders-cli)
   -n, --file-name string   name of the file where you want the downloaded order asset to be stored
                            (defaults:
-                                certs - SASiyaV4_<order number>_certs.zip
-                                license and depassets - SASiyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>.<asset extension>
+                                certs - SASViyaV4_<order number>_certs.zip
+                                license and depassets - SASViyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>.<asset extension>
                            )
   -p, --file-path string   path to where you want the downloaded order asset stored (default is path to your current working directory)
   -h, --help               help for viya4-orders-cli

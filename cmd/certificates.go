@@ -19,9 +19,12 @@ var certificatesCmd = &cobra.Command{
 	Aliases: []string{"certs", "cer"},
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ar := assetreqs.New(token, "certificates", args[0], "", "",
+		ar, err := assetreqs.New(token, "certificates", args[0], "", "",
 			assetFilePath, assetFileName, outFormat)
-		err := ar.GetAsset()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		err = ar.GetAsset()
 		if err != nil {
 			log.Fatalln(err)
 		}
