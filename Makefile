@@ -18,7 +18,6 @@ darwin: $(DARWIN) ## Build for Darwin (Mac OS)
 $(WINDOWS):
 	@echo version: $(VERSION)
 	env GOOS=windows GOARCH=amd64 go build -o $(WINDOWS) -ldflags="$(BUILDARGS)" $(MAIN)
-
 $(LINUX):
 	@echo version: $(VERSION)
 	env GOOS=linux GOARCH=amd64 go build -o $(LINUX) -ldflags="$(BUILDARGS)" $(MAIN)
