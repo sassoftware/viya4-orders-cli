@@ -49,7 +49,7 @@ func init() {
 		"config file (default is $HOME/.viya4-orders-cli)")
 	rootCmd.PersistentFlags().StringVarP(&assetFileName, "file-name", "n", "",
 		"name of the file where you want the downloaded order asset stored\n"+
-			"(defaults:\n\tcerts - SASiyaV4_<order number>_certs.zip\n\tlicense and depassets - SASiyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>."+
+			"(defaults:\n\tcerts - SASViyaV4_<order number>_certs.zip\n\tlicense and depassets - SASViyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>."+
 			"<asset extension>\n)")
 	rootCmd.PersistentFlags().StringVarP(&assetFilePath, "file-path", "p", "",
 		"path to where you want the downloaded order asset stored (default is path to your current working directory)")
@@ -130,13 +130,15 @@ func setOptions() {
 	}
 }
 
-// usageError prints the given error followed by the help text.
+// usageError prints the given error followed by the tool usage text, and then exits.
+// Essentially, this mimics what Cobra does when it detects a usage error.
 func usageError(message string) {
 	println("Error: " + message)
-	err := rootCmd.Help()
+	err := rootCmd.Usage()
 	if err != nil {
-		log.Fatalln("ERROR: rootCmd.Help() returned " + err.Error())
+		log.Fatalln("ERROR: rootCmd.Usage() returned " + err.Error())
 	}
+	os.Exit(0)
 }
 
 // auth gets the Bearer token.
