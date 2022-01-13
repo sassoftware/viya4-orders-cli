@@ -56,6 +56,9 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&outFormat, "output", "o", "text",
 		"output format - valid values:\n"+
 			"\tj, json\n\tt, text\n")
+
+	// Disable completion command (provided by Cobra by default starting with v1.30)
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
 
 // initConfig reads in config file and ENV variables if set.
