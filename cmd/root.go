@@ -20,6 +20,7 @@ var (
 	cfgFile       string
 	outFormat     string
 	token         string
+	allowUnsuppd  bool
 )
 
 // Version is set by the build.
@@ -45,6 +46,7 @@ func init() {
 	// Authentication is required for all commands.
 	cobra.OnInitialize(initConfig, auth)
 
+	// Define global flags / options and set their default values.
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "",
 		"config file (default is $HOME/.viya4-orders-cli)")
 	rootCmd.PersistentFlags().StringVarP(&assetFileName, "file-name", "n", "",
@@ -56,6 +58,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&outFormat, "output", "o", "text",
 		"output format - valid values:\n"+
 			"\tj, json\n\tt, text\n")
+
+	// Create and hide a flag to allow retrieval of assets at cadences that are no longer in support.
+	rootCmd.PersistentFlags().BoolVarP(&allowUnsuppd, "allowUnsupported", "u", false, "")
+	aus := rootCmd.PersistentFlags().Lookup("allowUnsupported")
+	aus.Hidden = true
 
 	// Disable completion command (provided by Cobra by default starting with v1.30)
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
@@ -126,11 +133,13 @@ func setOptions() {
 		}
 	}
 
-	outFormat := viper.GetString("output")
+	outFormat = viper.GetString("output")
 	// Validate output flag value.
 	if outFormat != "text" && outFormat != "t" && outFormat != "json" && outFormat != "j" {
 		usageError("invalid value " + outFormat + " specified for -o, --output option!")
 	}
+
+	allowUnsuppd = viper.GetBool("allowUnsupported")
 }
 
 // usageError prints the given error followed by the tool usage text, and then exits.

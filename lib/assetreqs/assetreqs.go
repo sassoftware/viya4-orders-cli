@@ -33,28 +33,30 @@ const (
 
 // AssetReq provides fields that define the parameters of an order asset request.
 type AssetReq struct {
-	token string
-	aName string
-	oNum  string
-	cName string
-	cVer  string
-	fPath string
-	fName string
-	oFmt  string
+	token        string
+	aName        string
+	oNum         string
+	cName        string
+	cVer         string
+	fPath        string
+	fName        string
+	oFmt         string
+	allowUnsuppd bool
 }
 
 // New initializes an AssetReq struct.
 func New(token string, assetName string, orderNum string, cadenceName string, cadenceVer string, filePath string,
-	fileName string, outputFormat string) (ar AssetReq) {
+	fileName string, outputFormat string, allowUnsuppd bool) (ar AssetReq) {
 	return AssetReq{
-		token: token,
-		aName: assetName,
-		oNum:  orderNum,
-		cName: cadenceName,
-		cVer:  cadenceVer,
-		fPath: filePath,
-		fName: fileName,
-		oFmt:  outputFormat,
+		token:        token,
+		aName:        assetName,
+		oNum:         orderNum,
+		cName:        cadenceName,
+		cVer:         cadenceVer,
+		fPath:        filePath,
+		fName:        fileName,
+		oFmt:         outputFormat,
+		allowUnsuppd: allowUnsuppd,
 	}
 }
 
@@ -168,6 +170,14 @@ func (ar AssetReq) buildReq() (req *http.Request, err error) {
 		return req, errors.New("ERROR: setup of asset request failed: " + err.Error())
 	}
 	req.Header.Set("Authorization", bearer)
+
+	// If the allowUnsupported option was used, pass along allowUnsupported=true as a query param on the API call.
+	if ar.allowUnsuppd {
+		q := req.URL.Query()
+		q.Add("allowUnsupported", "true")
+		req.URL.RawQuery = q.Encode()
+		output.AssetReqURL += "?allowUnsupported=true"
+	}
 
 	return req, nil
 }

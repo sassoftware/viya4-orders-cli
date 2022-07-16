@@ -19,7 +19,7 @@ var licenseCmd = &cobra.Command{
 	Aliases: []string{"lic"},
 	Args:    cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
-		ar := assetreqs.New(token, "license", args[0], args[1], args[2], assetFilePath, assetFileName, outFormat)
+		ar := assetreqs.New(token, "license", args[0], args[1], args[2], assetFilePath, assetFileName, outFormat, allowUnsuppd)
 		err := ar.GetAsset()
 		if err != nil {
 			log.Fatalln(err)

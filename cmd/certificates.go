@@ -19,8 +19,9 @@ var certificatesCmd = &cobra.Command{
 	Aliases: []string{"certs", "cer"},
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		// Cadence is not a factor in certs, so we hard-code allowUnsuppd to false for the last argument.
 		ar := assetreqs.New(token, "certificates", args[0], "", "",
-			assetFilePath, assetFileName, outFormat)
+			assetFilePath, assetFileName, outFormat, false)
 		err := ar.GetAsset()
 		if err != nil {
 			log.Fatalln(err)
