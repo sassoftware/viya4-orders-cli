@@ -1,6 +1,6 @@
-# Copyright © 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+# Copyright © 2020-2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
-FROM golang:1.17 AS builder
+FROM golang:1.19.4 AS builder
 
 WORKDIR /gobuild
 ENV CGO_ENABLED=0
