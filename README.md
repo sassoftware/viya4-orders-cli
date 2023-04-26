@@ -115,7 +115,8 @@ Take the following steps to start using SAS Viya Orders CLI:
 1. If you do not yet have credentials for the
    [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html),
    obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
-
+   
+   Note: To use [viya4-deployment](https://github.com/sassoftware/viya4-deployment) requires an actual SAS Viya 4+(2020.x) order, and not the trial
 1. Record the `Key` and the `Secret` values that serve as your API credentials.
 1. Base64 encode each value.
    > **NOTE:** When base64 encoding the credentials, take care not to encode
