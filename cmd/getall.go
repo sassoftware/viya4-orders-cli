@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"log"
+	"sync"
 
 	"github.com/sassoftware/viya4-orders-cli/lib/assetreqs"
 	"github.com/spf13/cobra"
@@ -19,23 +20,40 @@ var getallCmd = &cobra.Command{
 	Aliases: []string{"all"},
 	Args:    cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
-		ar := assetreqs.New(token, "license", args[0], args[1], args[2], assetFilePath, "", outFormat, allowUnsuppd)
-		err := ar.GetAsset()
-		if err != nil {
-			log.Fatalln(err)
-		}
 
-		ar = assetreqs.New(token, "deploymentAssets", args[0], args[1], args[2], assetFilePath, "", outFormat, allowUnsuppd)
-		err = ar.GetAsset()
-		if err != nil {
-			log.Fatalln(err)
-		}
+		var wg sync.WaitGroup
 
-		ar = assetreqs.New(token, "certificates", args[0], "", "", assetFilePath, "", outFormat, allowUnsuppd)
-		err = ar.GetAsset()
-		if err != nil {
-			log.Fatalln(err)
-		}
+		wg.Add(3)
+
+		go func() {
+			ar := assetreqs.New(token, "license", args[0], args[1], args[2], assetFilePath, "", outFormat, allowUnsuppd)
+			err := ar.GetAsset()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			wg.Done()
+		}()
+
+		go func() {
+			ar := assetreqs.New(token, "deploymentAssets", args[0], args[1], args[2], assetFilePath, "", outFormat, allowUnsuppd)
+			err := ar.GetAsset()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			wg.Done()
+		}()
+
+		go func() {
+			ar := assetreqs.New(token, "certificates", args[0], "", "", assetFilePath, "", outFormat, allowUnsuppd)
+			err := ar.GetAsset()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			wg.Done()
+		}()
+
+		wg.Wait()
+
 	},
 }
 

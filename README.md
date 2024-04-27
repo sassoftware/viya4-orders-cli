@@ -22,6 +22,7 @@ Available Commands:
   deploymentAssets Download deployment assets for the given order number at the given cadence name and version - if version not specified, get the latest version of the given cadence name
   help             Help about any command
   license          Download a license for the given order number at the given cadence name and version
+  getall           Download license + certificates + deploymentAssests for the given order number at the given cadence name and version
 
 Flags:
   -c, --config string      config file (default is $HOME/.viya4-orders-cli)
