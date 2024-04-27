@@ -207,6 +207,8 @@ using SAS Viya Orders CLI:
    --config /sasstuff/.viya4-orders-cli.yaml --file-path /sasstuff/sasfiles --file-name 923456_lts_depassets
   ```
 
+  NOTE: the `--file-name` option is not applicable when using the `getall` command
+  
   Sample output:
 
   ```text
