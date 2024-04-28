@@ -24,33 +24,33 @@ var getallCmd = &cobra.Command{
 		// check if "file-name" flag is used and if so, log a message this parameter is ignored with the getall command
 		//if cmd.Flags().Lookup("file-name").Changed {
 		if assetFileName != "" {
-			log.Println("The getall command ignores the file-name option. Default file names will be used instead.")
+			log.Println("The getall command ignores the --file-name option. Default file names will be used instead.")
 		}
 
 		var wg sync.WaitGroup
-		var objectTypes []string = []string{"license", "deploymentAssets", "certificates"}
+		var assetTypes []string = []string{"license", "deploymentAssets", "certificates"}
 
-		for _, v := range objectTypes {
+		for _, v := range assetTypes {
 
 			wg.Add(1)
 
 			// cannot reference "v" directly inside func see https://stackoverflow.com/questions/39207608/how-does-golang-share-variables-between-goroutines
-			go func(objectType string) {
+			go func(assetType string) {
 
 				var p2, p3 string
 				defer wg.Done()
 
-				switch objectType {
+				switch assetType {
 				case "certificates":
 					p2, p3 = "", ""
 				default:
 					p2, p3 = args[1], args[2]
 				}
 
-				ar := assetreqs.New(token, objectType, args[0], p2, p3, assetFilePath, "", outFormat, allowUnsuppd)
+				ar := assetreqs.New(token, assetType, args[0], p2, p3, assetFilePath, "", outFormat, allowUnsuppd)
 				err := ar.GetAsset()
 				if err != nil {
-					log.Fatalln(err)
+					log.Fatalln("Error ocurred while getting asset type", assetType, "error is:", err)
 				}
 			}(v)
 
