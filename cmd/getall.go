@@ -35,10 +35,15 @@ var getallCmd = &cobra.Command{
 			wg.Add(1)
 
 			// cannot reference "v" directly inside func see https://stackoverflow.com/questions/39207608/how-does-golang-share-variables-between-goroutines
+			// even though it was supposed to work fine in Go 1.22 https://go.dev/blog/go1.22
 			go func(assetType string) {
 
+				defer func() {
+					recover()
+					wg.Done()
+				}()
+
 				var p2, p3 string
-				defer wg.Done()
 
 				switch assetType {
 				case "certificates":
@@ -50,13 +55,15 @@ var getallCmd = &cobra.Command{
 				ar := assetreqs.New(token, assetType, args[0], p2, p3, assetFilePath, "", outFormat, allowUnsuppd)
 				err := ar.GetAsset()
 				if err != nil {
-					log.Fatalln("Error ocurred while getting asset type", assetType, "error is:", err)
+					log.Panicln("Error ocurred while getting asset type", assetType, "error is:", err)
 				}
 			}(v)
 
 		}
 
+		log.Println("Waiting for downloads to complete.")
 		wg.Wait()
+		log.Println("Downloads are complete.")
 
 	},
 }
