@@ -21,6 +21,12 @@ var getallCmd = &cobra.Command{
 	Args:    cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
 
+		// check if "file-name" flag is used and if so, log a message this parameter is ignored with the getall command
+		//if cmd.Flags().Lookup("file-name").Changed {
+		if assetFileName != "" {
+			log.Println("The getall command ignores the file-name option. Default file names will be used instead.")
+		}
+
 		var wg sync.WaitGroup
 		var objectTypes []string = []string{"license", "deploymentAssets", "certificates"}
 
