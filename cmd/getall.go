@@ -22,35 +22,33 @@ var getallCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var wg sync.WaitGroup
+		var objectTypes []string = []string{"license", "deploymentAssets", "certificates"}
 
-		wg.Add(3)
+		for _, v := range objectTypes {
 
-		go func() {
-			ar := assetreqs.New(token, "license", args[0], args[1], args[2], assetFilePath, "", outFormat, allowUnsuppd)
-			err := ar.GetAsset()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			wg.Done()
-		}()
+			wg.Add(1)
 
-		go func() {
-			ar := assetreqs.New(token, "deploymentAssets", args[0], args[1], args[2], assetFilePath, "", outFormat, allowUnsuppd)
-			err := ar.GetAsset()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			wg.Done()
-		}()
+			// cannot reference "v" directly inside func see https://stackoverflow.com/questions/39207608/how-does-golang-share-variables-between-goroutines
+			go func(objectType string) {
 
-		go func() {
-			ar := assetreqs.New(token, "certificates", args[0], "", "", assetFilePath, "", outFormat, allowUnsuppd)
-			err := ar.GetAsset()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			wg.Done()
-		}()
+				var p2, p3 string
+				defer wg.Done()
+
+				switch objectType {
+				case "certificates":
+					p2, p3 = "", ""
+				default:
+					p2, p3 = args[1], args[2]
+				}
+
+				ar := assetreqs.New(token, objectType, args[0], p2, p3, assetFilePath, "", outFormat, allowUnsuppd)
+				err := ar.GetAsset()
+				if err != nil {
+					log.Fatalln(err)
+				}
+			}(v)
+
+		}
 
 		wg.Wait()
 
