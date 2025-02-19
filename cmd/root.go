@@ -50,11 +50,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "",
 		"config file (default is $HOME/.viya4-orders-cli)")
 	rootCmd.PersistentFlags().StringVarP(&assetFileName, "file-name", "n", "",
-		"name of the file where you want the downloaded order asset stored\n"+
-			"(defaults:\n\tcerts - SASViyaV4_<order number>_certs.zip\n\tlicense and depassets - SASViyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>."+
+		"name of the file where you want the downloaded order asset to be stored\n"+
+			"(defaults:\n\tassetHistory - assetHistory_<order number>.json\n\tcerts - SASViyaV4_<order number>_certs.zip\n\tlicense and depassets - SASViyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>."+
 			"<asset extension>\n)")
 	rootCmd.PersistentFlags().StringVarP(&assetFilePath, "file-path", "p", "",
-		"path to where you want the downloaded order asset stored (default is path to your current working directory)")
+		"path to where you want the downloaded order asset to be stored (default is path to your current working directory)")
 	rootCmd.PersistentFlags().StringVarP(&outFormat, "output", "o", "text",
 		"output format - valid values:\n"+
 			"\tj, json\n\tt, text\n")
