@@ -18,6 +18,7 @@ Usage:
   viya4-orders-cli [command]
 
 Available Commands:
+  assetHistory     Get the list of completed asset downloads for the given order number
   certificates     Download certificates for the given order number
   deploymentAssets Download deployment assets for the given order number at the given cadence name and version - if version not specified, get the latest version of the given cadence name
   help             Help about any command
@@ -27,10 +28,11 @@ Flags:
   -c, --config string      config file (default is $HOME/.viya4-orders-cli)
   -n, --file-name string   name of the file where you want the downloaded order asset to be stored
                            (defaults:
+                                assetHistory - assetHistory_<order number>.json
                                 certs - SASViyaV4_<order number>_certs.zip
                                 license and depassets - SASViyaV4_<order number>_<renewal sequence>_<cadence information>_<asset name>_<date time stamp>.<asset extension>
                            )
-  -p, --file-path string   path to where you want the downloaded order asset stored (default is path to your current working directory)
+  -p, --file-path string   path to where you want the downloaded order asset to be stored (default is path to your current working directory)
   -h, --help               help for viya4-orders-cli
   -o, --output string      output format - valid values:
                                 j, json
@@ -47,7 +49,7 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
   [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
   are required. You can obtain them from the
   [SAS API Portal](https://apiportal.sas.com/get-started).
-- [Go](https://golang.org/) 1.19.4 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
+- [Go](https://golang.org/) 1.22.3 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
 - [git](https://git-scm.com/) version 2 or later is required if you intend to clone the repository.
 
 ### Installation
@@ -144,12 +146,11 @@ Take the following steps to start using SAS Viya Orders CLI:
 
 1. If you want to use a configuration file, create it.
 
-   The default location for the configuration file is `$HOME/.viya4-orders-cli`.
-   You can save the file anywhere you want as long as you use the `--config` /
-   `-c` option to inform the CLI of any non-default location.
+   The default location for the configuration file is `$HOME/.viya4-orders-cli` and the default format is [YAML](https://yaml.org/).
+   You can save the file anywhere you want and use any supported format, as long as you use the `--config` /
+   `-c` option to specify its path and name to the CLI.
 
-   The config file must be in [YAML](https://yaml.org/) format, or else its file
-   name must include a file extension that denotes another format. Supported
+   When using the `-c` option to specify a config file, that file must have a valid extension denoting its format. Supported
    formats are [JSON](https://www.json.org/),
    [TOML](https://github.com/toml-lang/toml), [YAML](https://yaml.org/),
    [HCL](https://github.com/hashicorp/hcl),

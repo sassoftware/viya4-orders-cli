@@ -12,7 +12,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime"
 	"net/http"
 	"net/url"
@@ -38,6 +37,7 @@ type AssetReq struct {
 	oNum         string
 	cName        string
 	cVer         string
+	cRel         string
 	fPath        string
 	fName        string
 	oFmt         string
@@ -45,14 +45,15 @@ type AssetReq struct {
 }
 
 // New initializes an AssetReq struct.
-func New(token string, assetName string, orderNum string, cadenceName string, cadenceVer string, filePath string,
-	fileName string, outputFormat string, allowUnsuppd bool) (ar AssetReq) {
+func New(token, assetName, orderNum, cadenceName, cadenceVer, cadenceRel, filePath,
+	fileName, outputFormat string, allowUnsuppd bool) (ar AssetReq) {
 	return AssetReq{
 		token:        token,
 		aName:        assetName,
 		oNum:         orderNum,
 		cName:        cadenceName,
 		cVer:         cadenceVer,
+		cRel:         cadenceRel,
 		fPath:        filePath,
 		fName:        fileName,
 		oFmt:         outputFormat,
@@ -114,12 +115,17 @@ func (ar AssetReq) getFileName(contentDisp string) (fileName string, err error) 
 		}
 	}
 
-	// Get the name of the file as returned by the API
-	_, params, err := mime.ParseMediaType(contentDisp)
-	if err != nil {
-		return fileName, errors.New("ERROR: mime.ParseMediaType() returned: " + err.Error())
+	// Get the name of the asset file as returned by the API if applicable.
+	var apiFNm string
+	if ar.aName != "assetHistory" {
+		_, params, err := mime.ParseMediaType(contentDisp)
+		if err != nil {
+			return fileName, errors.New("ERROR: mime.ParseMediaType() returned: " + err.Error())
+		}
+		apiFNm = filepath.Join(filePath, params["filename"])
+	} else {
+		apiFNm = ar.oNum + "_assetHistory.json"
 	}
-	apiFNm := filepath.Join(filePath, params["filename"])
 
 	if ar.fName != "" {
 		// Even if they specified -n, use the extension that the API returned
@@ -207,6 +213,12 @@ func (ar AssetReq) buildURL() (urlStr string, err error) {
 		_, _ = fmt.Fprintf(&b, "%s", strings.ToLower(ar.cVer))
 		_, _ = fmt.Fprintf(&b, "%s", "/")
 	}
+
+	if ar.cRel != "" {
+		_, _ = fmt.Fprintf(&b, "%s", "cadenceReleases/")
+		_, _ = fmt.Fprintf(&b, "%s", strings.ToLower(ar.cRel))
+		_, _ = fmt.Fprintf(&b, "%s", "/")
+	}
 	_, _ = fmt.Fprintf(&b, "%s", ar.aName)
 
 	u.Path = b.String()
@@ -233,9 +245,9 @@ func (ar AssetReq) makeReq() (fileName string, err error) {
 
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		if err != nil {
-			return fileName, errors.New("ERROR: ioutil.ReadAll() returned: " + err.Error() +
+			return fileName, errors.New("ERROR: io.ReadAll() returned: " + err.Error() +
 				" on attempt to read response body from non-200 response code")
 		}
 		em := "ERROR: asset request failed: "
