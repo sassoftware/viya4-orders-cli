@@ -57,8 +57,9 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 #### Option 1 - Download a pre-built binary file.
 
 Binaries for Windows, macOS, and Linux are available as downloads from
-https://github.com/sassoftware/viya4-orders-cli/releases. Expand `Assets` under
-the release of interest.
+https://github.com/sassoftware/viya4-orders-cli/releases/latest.
+
+If you choose this option, refer to [Verifying Release Signatures](#verifying-release-signatures) to verify the authenticity and integrity of the downloaded binary.
 
 #### Option 2 - Build the project yourself.
 
@@ -258,6 +259,47 @@ using SAS Viya Orders CLI:
       "cadenceRelease": ""
   }
   ```
+
+## Verifying Release Signatures
+
+SAS Viya Orders CLI releases are cryptographically signed with [GPG](https://www.gnupg.org/). To verify the authenticity of a downloaded binary:
+
+### 1. Import the SAS release signing public key
+
+``` bash
+# Download and import the public key
+curl -O https://github.com/sassoftware/viya4-orders-cli/releases/download/latest/sas-release-signing-key.asc
+
+gpg --import sas-release-signing-key.asc
+```
+
+### 2. Verify the key fingerprint
+
+Ensure the imported key matches this fingerprint:
+```
+A604 6426 9268 85FD 8E00 5C42 D7EC 86DE FBC5 F8E2
+```
+
+You can check with:
+```bash
+gpg --fingerprint sas.softwareorders@sas.com
+```
+
+### 3. Verify the signature
+
+Download both the binary and its corresponding `.asc` signature file from https://github.com/sassoftware/viya4-orders-cli/releases/latest, then verify:
+
+```bash
+# Example for Linux binary
+gpg --verify viya4-orders-cli_linux_amd64.asc viya4-orders-cli_linux_amd64
+```
+
+A successful verification will show:
+```
+gpg: Good signature from "SAS Institute, Inc. (Release Signing) <sas.softwareorders@sas.com>"
+```
+
+**Note:** You may see a warning about the key not being "certified with a trusted signature." This is normal and does not affect the verification. The warning simply means you haven't explicitly marked the key as trusted in your keyring.
 
 ## Contributing
 
