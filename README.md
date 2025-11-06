@@ -268,7 +268,7 @@ SAS Viya Orders CLI releases are cryptographically signed with [GPG](https://www
 
 ``` bash
 # Download and import the public key
-curl -O https://github.com/sassoftware/viya4-orders-cli/releases/download/latest/sas-release-signing-key.asc
+curl -LO https://github.com/sassoftware/viya4-orders-cli/releases/latest/download/sas-release-signing-key.asc
 
 gpg --import sas-release-signing-key.asc
 ```
