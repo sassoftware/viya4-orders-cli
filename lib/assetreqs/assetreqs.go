@@ -25,16 +25,8 @@ import (
 const checksumsFile string = "sas-bases/checksums.txt"
 
 const (
-	// Can use after Apigee deprecation complete.
-	// viyaOrdersAPIHost       string = "https://api.sas.com"
-	// Use before Apigee deprecation is complete.
-	// viyaOrdersAPIHost       string = "https://api.apiproxy.sas.com"
-	// viyaOrdersAPIBasePath   string = "/mysas"
-	// TODO: Testing-only - DO NOT PUSH!!!!
-	viyaOrdersAPIHost string = "https://api.apiproxy.sas.com"
-	// TODO: Testing-only - DO NOT PUSH!!!!
-	//viyaOrdersAPIBasePath string = "/mysas_dev"
-	viyaOrdersAPIBasePath   string = "/mysas_stage"
+	viyaOrdersAPIHost       string = "https://api.apiproxy.sas.com"
+	viyaOrdersAPIBasePath   string = "/mysas"
 	viyaOrdersAPIOrdersPath string = "/orders"
 )
 
