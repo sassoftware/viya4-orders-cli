@@ -1,16 +1,16 @@
 # SAS Viya Orders CLI
 
 SAS Viya Orders is a command-line interface (CLI) that calls the appropriate
-[SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
-endpoint to obtain the requested deployment assets for a specified SAS Viya
+[SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
+endpoint to obtain the requested assets for a specified SAS Viya
 software order.
 
 ## Overview
 
 You can use this CLI both as a tool and as an example of how to use Golang to
 call the
-[SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html).
-You can also import the assetreqs and authn packages and use them in your own
+[SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas).
+You can also import the _assetreqs_ and _authn_ packages and use them in your own
 Golang project.
 
 ```
@@ -46,10 +46,9 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 ### Prerequisites
 
 - API credentials for the
-  [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
-  are required. You can obtain them from the
-  [SAS API Portal](https://apiportal.sas.com/get-started).
-- [Go](https://golang.org/) 1.22.3 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
+  [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
+  are required. You can obtain them [here](https://developer.sas.com/rest-apis/mysas/applications).
+- [Go](https://golang.org/) 1.25.6 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
 - [git](https://git-scm.com/) version 2 or later is required if you intend to clone the repository.
 
 ### Installation
@@ -116,10 +115,10 @@ To build the project, you have several options:
 Take the following steps to start using SAS Viya Orders CLI:
 
 1. If you do not yet have credentials for the
-   [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html),
-   obtain them from the [SAS API Portal](https://apiportal.sas.com/get-started).
+   [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas), obtain them [here](https://developer.sas.com/rest-apis/mysas/applications).
 
-1. Record the `Key` and the `Secret` values that serve as your API credentials.
+1. Save off the `Client ID` and the `Client Secret` values, which will serve as your API credentials.
+   > **NOTE:** You only need one of the `Client Secret` values - either will work.
 1. Base64 encode each value.
    > **NOTE:** When base64 encoding the credentials, take care not to encode
    > end-of-line characters into the result. <br/> Here is an example of the
@@ -130,9 +129,9 @@ Take the following steps to start using SAS Viya Orders CLI:
 1. Add both credentials to your configuration file, or define them as
    environment variables:
 
-   - Assign the encoded value of `Key` to `clientCredentialsId` (if using environment variables, use
+   - Assign the encoded value of `Client ID` to `clientCredentialsId` (if using environment variables, use
     `CLIENTCREDENTIALSID`).
-   - Assign the encoded value of `Secret` to `clientCredentialsSecret` (if using environment variables, use
+   - Assign the encoded value of `Client Secret` to `clientCredentialsSecret` (if using environment variables, use
     `CLIENTCREDENTIALSSECRET`).
 
 1. Select CLI options. You can then specify them on the command line, pass them
@@ -260,6 +259,23 @@ using SAS Viya Orders CLI:
   }
   ```
 
+- Get deployment assets for SAS Viya order `923457` at release `20260127.1769510312235` of cadence version `Stable 2026.01`. Receive the output in text format:
+
+  ```
+  viya4-orders-cli_windows_amd64.exe dep 923457 stable 2026.01 20260127.1769510312235
+  ```
+
+  Sample output:
+
+  ```text
+  OrderNumber: 923457
+  AssetName: deploymentAssets
+  AssetReqURL: https://api.sas.com/mysas/orders/923457/cadenceNames/stable/cadenceVersions/2026.01/cadenceReleases/20260127.1769510312235/deploymentAssets
+  AssetLocation: /path/to/cwd/SASViyaV4_923457_0_stable_2026.01_20260127.1769510312235_deploymentAssets_1769555752230.tgz
+  Cadence: Stable 2026.01
+  CadenceRelease: 20260127.1769510312235
+  ```
+
 ## Verifying Release Signatures
 
 SAS Viya Orders CLI releases are cryptographically signed with [GPG](https://www.gnupg.org/). To verify the authenticity of a downloaded binary:
@@ -312,6 +328,5 @@ This project is licensed under the [Apache 2.0 License](LICENSE).
 
 ## Additional Resources
 
-- [SAS API Portal](https://apiportal.sas.com/docs/mysasprod/1/overview)
-- [SAS Viya Orders API](https://developer.sas.com/guides/sas-viya-orders.html)
+- [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
 - [SAS Viya Operations Guide](https://documentation.sas.com/?softwareId=mysas&softwareVersion=prod&docsetId=itopswlcm&docsetTarget=home.htm)

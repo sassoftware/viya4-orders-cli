@@ -4,12 +4,12 @@
 package cmd
 
 import (
+	"encoding/base64"
 	"fmt"
 	"log"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
-	"github.com/sassoftware/viya4-orders-cli/lib/authn"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -19,7 +19,8 @@ var (
 	assetFilePath string
 	cfgFile       string
 	outFormat     string
-	token         string
+	clientID      string
+	clientSecret  string
 	allowUnsuppd  bool
 )
 
@@ -44,7 +45,7 @@ func Execute() {
 // init performs setup tasks.
 func init() {
 	// Authentication is required for all commands.
-	cobra.OnInitialize(initConfig, auth)
+	cobra.OnInitialize(initConfig, setCreds)
 
 	// Define global flags / options and set their default values.
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "",
@@ -153,11 +154,16 @@ func usageError(message string) {
 	os.Exit(0)
 }
 
-// auth gets the Bearer token.
-func auth() {
-	var err error
-	token, err = authn.GetBearerToken()
+func setCreds() {
+	cID, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsId"))
 	if err != nil {
-		log.Fatalln(err.Error())
+		log.Fatalln("ERROR: attempt to decode clientCredentialsId failed: " + err.Error())
 	}
+	cSecret, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsSecret"))
+	if err != nil {
+		log.Fatalln("ERROR: attempt to decode clientCredentialsSecret failed: " + err.Error())
+	}
+
+	clientID = string(cID)
+	clientSecret = string(cSecret)
 }
