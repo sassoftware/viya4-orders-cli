@@ -115,7 +115,7 @@ To build the project, you have several options:
 Take the following steps to start using SAS Viya Orders CLI:
 
 1. If you do not yet have credentials for the
-   [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas), obtain them [here](https://developer.sas.com/rest-apis/mysas/applications).
+   [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas), obtain them [here](https://developer.sas.com/rest-apis/mysas/applications) - instructions can be found on the _Authentication_ tab in the same UI [here](https://developer.sas.com/rest-apis/mysas/docs/getting-started/authentication#obtain-client-credentials).
 
 1. Save off the `Client ID` and the `Client Secret` values, which will serve as your API credentials.
    > **NOTE:** You only need one of the `Client Secret` values - either will work.
