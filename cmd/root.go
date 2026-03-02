@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
+	"unicode"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -164,6 +166,6 @@ func setCreds() {
 		log.Fatalln("ERROR: attempt to decode clientCredentialsSecret failed: " + err.Error())
 	}
 
-	clientID = string(cID)
-	clientSecret = string(cSecret)
+	clientID = strings.TrimRightFunc(string(cID), unicode.IsControl)
+	clientSecret = strings.TrimRightFunc(string(cSecret), unicode.IsControl)
 }
