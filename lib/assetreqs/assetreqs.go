@@ -25,14 +25,15 @@ import (
 const checksumsFile string = "sas-bases/checksums.txt"
 
 const (
-	viyaOrdersAPIHost       string = "https://api.sas.com"
+	viyaOrdersAPIHost       string = "https://api.apiproxy.sas.com"
 	viyaOrdersAPIBasePath   string = "/mysas"
 	viyaOrdersAPIOrdersPath string = "/orders"
 )
 
 // AssetReq provides fields that define the parameters of an order asset request.
 type AssetReq struct {
-	token        string
+	clientID     string
+	clientSecret string
 	aName        string
 	oNum         string
 	cName        string
@@ -45,10 +46,11 @@ type AssetReq struct {
 }
 
 // New initializes an AssetReq struct.
-func New(token, assetName, orderNum, cadenceName, cadenceVer, cadenceRel, filePath,
+func New(cID, cSec, assetName, orderNum, cadenceName, cadenceVer, cadenceRel, filePath,
 	fileName, outputFormat string, allowUnsuppd bool) (ar AssetReq) {
 	return AssetReq{
-		token:        token,
+		clientID:     cID,
+		clientSecret: cSec,
 		aName:        assetName,
 		oNum:         orderNum,
 		cName:        cadenceName,
@@ -170,12 +172,14 @@ func (ar AssetReq) buildReq() (req *http.Request, err error) {
 	}
 	output.AssetReqURL = reqURL
 
-	bearer := "Bearer " + ar.token
 	req, err = http.NewRequest("GET", reqURL, nil)
 	if err != nil {
 		return req, errors.New("ERROR: setup of asset request failed: " + err.Error())
 	}
-	req.Header.Set("Authorization", bearer)
+
+	// Use direct assignment to preserve exact header casing (bypasses canonicalization)
+	req.Header["ClientId"] = []string{ar.clientID}
+	req.Header["ClientSecret"] = []string{ar.clientSecret}
 
 	// If the allowUnsupported option was used, pass along allowUnsupported=true as a query param on the API call.
 	if ar.allowUnsuppd {
