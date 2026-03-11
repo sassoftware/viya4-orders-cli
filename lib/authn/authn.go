@@ -22,9 +22,8 @@ const (
 	viyaOrdersAPITokenPath string = "/token"
 )
 
-// GetBearerToken calls the /token SAS Viya Orders API endpoint to exchange client credentials for a Bearer token.
-// The client credentials are obtained from the SAS API Portal (https://apiportal.sas.com), and should be defined in
-// Viper (https://github.com/spf13/viper) as clientCredentialsId (key) and clientCredentialsSecret (secret).
+// GetBearerToken calls the /token SAS Viya Orders API endpoint to exchange client credentials for a Bearer token to
+// use with the Apigee proxy.
 func GetBearerToken(cID, cSec string) (token string, err error) {
 	// Build the request URL.
 	u, err := url.ParseRequestURI(viyaOrdersAPIHost)
