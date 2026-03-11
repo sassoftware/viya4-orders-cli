@@ -20,7 +20,7 @@ var assetHistoryCmd = &cobra.Command{
 	Aliases: []string{"ah"},
 	Args:    cobra.RangeArgs(1, 1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ar := assetreqs.New(clientID, clientSecret, "assetHistory", args[0], "", "", "", assetFilePath, assetFileName, outFormat, allowUnsuppd)
+		ar := assetreqs.New(clientCredsType, token, clientID, clientSecret, "assetHistory", args[0], "", "", "", assetFilePath, assetFileName, outFormat, allowUnsuppd)
 		err := ar.GetAsset()
 		if err != nil {
 			log.Fatalln(err)

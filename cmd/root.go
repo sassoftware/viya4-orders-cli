@@ -12,18 +12,21 @@ import (
 	"unicode"
 
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/sassoftware/viya4-orders-cli/lib/authn"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var (
-	assetFileName string
-	assetFilePath string
-	cfgFile       string
-	outFormat     string
-	clientID      string
-	clientSecret  string
-	allowUnsuppd  bool
+	assetFileName   string
+	assetFilePath   string
+	cfgFile         string
+	outFormat       string
+	clientID        string
+	clientSecret    string
+	clientCredsType string // apigee or apim
+	token           string // only applies to Apigee creds
+	allowUnsuppd    bool
 )
 
 // Version is set by the build.
@@ -157,15 +160,45 @@ func usageError(message string) {
 }
 
 func setCreds() {
-	cID, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsId"))
-	if err != nil {
-		log.Fatalln("ERROR: attempt to decode clientCredentialsId failed: " + err.Error())
+	apimCIDProp := "apimClientCredentialsId"
+	apimCSecProp := "apimClientCredentialsSecret"
+	// Prefer APIM creds over Apigee.
+	if viper.IsSet(apimCIDProp) && viper.GetString(apimCIDProp) != "" && viper.IsSet(apimCSecProp) && viper.GetString(apimCSecProp) != "" {
+		clientCredsType = "apim"
+	} else {
+		clientCredsType = "apigee"
 	}
-	cSecret, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsSecret"))
+
+	var cIDProp, cSecProp string
+	if strings.EqualFold(clientCredsType, "apim") {
+		cIDProp = apimCIDProp
+		cSecProp = apimCSecProp
+	} else {
+		cIDProp = "clientCredentialsId"
+		cSecProp = "clientCredentialsSecret"
+	}
+
+	cID, err := base64.StdEncoding.DecodeString(viper.GetString(cIDProp))
 	if err != nil {
-		log.Fatalln("ERROR: attempt to decode clientCredentialsSecret failed: " + err.Error())
+		log.Fatalln("ERROR: attempt to decode " + cIDProp + " failed: " + err.Error())
+	}
+	cSecret, err := base64.StdEncoding.DecodeString(viper.GetString(cSecProp))
+	if err != nil {
+		log.Fatalln("ERROR: attempt to decode " + cSecProp + " failed: " + err.Error())
 	}
 
 	clientID = strings.TrimRightFunc(string(cID), unicode.IsControl)
 	clientSecret = strings.TrimRightFunc(string(cSecret), unicode.IsControl)
+
+	if clientCredsType == "apigee" {
+		apigeeAuth()
+	}
+}
+
+func apigeeAuth() {
+	var err error
+	token, err = authn.GetBearerToken(clientID, clientSecret)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 }
