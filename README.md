@@ -47,7 +47,7 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 - API credentials for the
   [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
   are required. You can obtain them [here](https://developer.sas.com/rest-apis/mysas/applications).
-  > [!IMPORTANT]
+  > **Important**
   > This is a new developer portal that generates keys used with the new APIM proxy for Viya Orders API. If you have keys that were generated in the [SAS Apigee Developer Portal](https://api.apiportal.sas.com), they will work until April 20, 2026.
 - [Go](https://golang.org/) 1.25.6 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
 - [git](https://git-scm.com/) version 2 or later is required if you intend to clone the repository.
@@ -119,10 +119,10 @@ Take the following steps to start using SAS Viya Orders CLI:
    [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas), obtain them [here](https://developer.sas.com/rest-apis/mysas/applications) - instructions can be found on the _Authentication_ tab in the same UI [here](https://developer.sas.com/rest-apis/mysas/docs/getting-started/authentication#obtain-client-credentials).
 
 1. Save off the `Client ID` and the `Client Secret` values, which will serve as your API credentials.
-   > [!NOTE]
+   > **NOTE**
    > You only need one of the `Client Secret` values - either will work.
 1. Base64 encode each value.
-   > [!NOTE]
+   > **NOTE**
    > When base64 encoding the credentials, take care not to encode
    > end-of-line characters into the result. <br/> Here is an example of the
    > correct way to encode from a Linux command prompt:<br/>
@@ -136,7 +136,7 @@ Take the following steps to start using SAS Viya Orders CLI:
     `APIMCLIENTCREDENTIALSID`).
    - Assign the encoded value of `Client Secret` to `apimClientCredentialsSecret` (if using environment variables, use
     `APIMCLIENTCREDENTIALSSECRET`).
-   > [!IMPORTANT]
+   > **Important**
    > If you are using keys generated in the [SAS Apigee Developer Portal](https://api.apiportal.sas.com), the property names to convey those in are `clientCredentialsId` / `CLIENTCREDENTIALSID` and `clientCredentialsSecret` / `CLIENTCREDENTIALSSECRET`. These keys will cease to work on April 20, 2026.
 
 
