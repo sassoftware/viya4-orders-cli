@@ -10,8 +10,7 @@ software order.
 You can use this CLI both as a tool and as an example of how to use Golang to
 call the
 [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas).
-You can also import the _assetreqs_ and _authn_ packages and use them in your own
-Golang project.
+You can also import the _assetreqs_ package and use it in your own Golang project.
 
 ```
 Usage:
@@ -48,6 +47,8 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 - API credentials for the
   [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
   are required. You can obtain them [here](https://developer.sas.com/rest-apis/mysas/applications).
+  > [!IMPORTANT]
+  > Above is a new developer portal that generates keys used with the new APIM proxy for Viya Orders API. If you have keys generated in the [SAS Apigee Developer Portal] (https://api.apiportal.sas.com), they will work until April 20, 2026.
 - [Go](https://golang.org/) 1.25.6 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
 - [git](https://git-scm.com/) version 2 or later is required if you intend to clone the repository.
 
@@ -118,9 +119,11 @@ Take the following steps to start using SAS Viya Orders CLI:
    [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas), obtain them [here](https://developer.sas.com/rest-apis/mysas/applications) - instructions can be found on the _Authentication_ tab in the same UI [here](https://developer.sas.com/rest-apis/mysas/docs/getting-started/authentication#obtain-client-credentials).
 
 1. Save off the `Client ID` and the `Client Secret` values, which will serve as your API credentials.
-   > **NOTE:** You only need one of the `Client Secret` values - either will work.
+   > [!NOTE] 
+   > You only need one of the `Client Secret` values - either will work.
 1. Base64 encode each value.
-   > **NOTE:** When base64 encoding the credentials, take care not to encode
+   > [!NOTE] 
+   > When base64 encoding the credentials, take care not to encode
    > end-of-line characters into the result. <br/> Here is an example of the
    > correct way to encode from a Linux command prompt:<br/>
    > `echo -n {secret} | base64`<br/><br/> Here is an example of the
@@ -129,10 +132,13 @@ Take the following steps to start using SAS Viya Orders CLI:
 1. Add both credentials to your configuration file, or define them as
    environment variables:
 
-   - Assign the encoded value of `Client ID` to `clientCredentialsId` (if using environment variables, use
-    `CLIENTCREDENTIALSID`).
-   - Assign the encoded value of `Client Secret` to `clientCredentialsSecret` (if using environment variables, use
-    `CLIENTCREDENTIALSSECRET`).
+   - Assign the encoded value of `Client ID` to `apimClientCredentialsId` (if using environment variables, use
+    `APIMCLIENTCREDENTIALSID`).
+   - Assign the encoded value of `Client Secret` to `apimClientCredentialsSecret` (if using environment variables, use
+    `APIMCLIENTCREDENTIALSSECRET`).
+  > [!IMPORTANT]
+  > If you are using keys generated in the [SAS Apigee Developer Portal] (https://api.apiportal.sas.com), the property names to convey those in are `clientCredentialsId` / `CLIENTCREDENTIALSID` and `clientCredentialsSecret` / `CLIENTCREDENTIALSSECRET`. These keys will cease to work on April 20, 2026.
+
 
 1. Select CLI options. You can then specify them on the command line, pass them
    in as environment variables, or include them in a configuration file.
@@ -162,8 +168,8 @@ Take the following steps to start using SAS Viya Orders CLI:
 Here is a sample YAML configuration file that contains client credentials:
 
 ```
-clientCredentialsId: 1a2B3c4D5e6F7h8I9j10K=
-clientCredentialsSecret: 4D5e6F7g8H9i==
+apimClientCredentialsId: 1a2B3c4D5e6F7h8I9j10K=
+apimClientCredentialsSecret: 4D5e6F7g8H9i==
 ```
 
 ### Running
@@ -213,7 +219,7 @@ using SAS Viya Orders CLI:
   2020/10/02 19:16:30 Using config file: /sasstuff/.viya4-orders-cli.yaml
   OrderNumber: 923456
   AssetName: deploymentAssets
-  AssetReqURL: https://api.sas.com/mysas/orders/923456/cadenceNames/lts/deploymentAssets
+  AssetReqURL: https://api.apiproxy.sas.com/mysas/orders/923456/cadenceNames/lts/deploymentAssets
   AssetLocation: /sasstuff/sasfiles/923456_lts_depassets.tgz
   Cadence: Long Term Support 2020.0
   CadenceRelease: 20200808.1596943588306
@@ -232,7 +238,7 @@ using SAS Viya Orders CLI:
   ```text
   OrderNumber: 923456
   AssetName: license
-  AssetReqURL: https://api.sas.com/mysas/orders/923456/cadenceNames/lts/cadenceVersions/2020.0/license
+  AssetReqURL: https://api.apiproxy.sas.com/mysas/orders/923456/cadenceNames/lts/cadenceVersions/2020.0/license
   AssetLocation: /auser/vocli/sasfiles/923456_lts_2020.0_license_ren1.jwt
   Cadence: Long Term Support 2020.0
   CadenceRelease:
@@ -252,7 +258,7 @@ using SAS Viya Orders CLI:
   {
       "orderNumber": "923457",
       "assetName": "certificates",
-      "assetReqURL": "https://api.sas.com/mysas/orders/923457/certificates",
+      "assetReqURL": "https://api.apiproxy.sas.com/mysas/orders/923457/certificates",
       "assetLocation": "C:\Users\auser\vocli\sasfiles\923457_certs.zip",
       "cadence": "",
       "cadenceRelease": ""
@@ -270,7 +276,7 @@ using SAS Viya Orders CLI:
   ```text
   OrderNumber: 923457
   AssetName: deploymentAssets
-  AssetReqURL: https://api.sas.com/mysas/orders/923457/cadenceNames/stable/cadenceVersions/2026.01/cadenceReleases/20260127.1769510312235/deploymentAssets
+  AssetReqURL: https://api.apiproxy.sas.com/mysas/orders/923457/cadenceNames/stable/cadenceVersions/2026.01/cadenceReleases/20260127.1769510312235/deploymentAssets
   AssetLocation: /path/to/cwd/SASViyaV4_923457_0_stable_2026.01_20260127.1769510312235_deploymentAssets_1769555752230.tgz
   Cadence: Stable 2026.01
   CadenceRelease: 20260127.1769510312235
