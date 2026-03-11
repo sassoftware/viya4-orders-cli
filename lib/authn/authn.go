@@ -26,15 +26,6 @@ const (
 // The client credentials are obtained from the SAS API Portal (https://apiportal.sas.com), and should be defined in
 // Viper (https://github.com/spf13/viper) as clientCredentialsId (key) and clientCredentialsSecret (secret).
 func GetBearerToken(cID, cSec string) (token string, err error) {
-	// id, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsId"))
-	// if err != nil {
-	// 	return token, errors.New("ERROR: attempt to decode clientCredentialsId failed: " + err.Error())
-	// }
-	// sec, err := base64.StdEncoding.DecodeString(viper.GetString("clientCredentialsSecret"))
-	// if err != nil {
-	// 	return token, errors.New("ERROR: attempt to decode clientCredentialsSecret failed: " + err.Error())
-	// }
-
 	// Build the request URL.
 	u, err := url.ParseRequestURI(viyaOrdersAPIHost)
 	if err != nil {
