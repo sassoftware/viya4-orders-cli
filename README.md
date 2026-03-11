@@ -47,7 +47,7 @@ Use "viya4-orders-cli [command] --help" for more information about a command.
 - API credentials for the
   [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
   are required. You can obtain them [here](https://developer.sas.com/rest-apis/mysas/applications).
-  > **Important**
+  > **IMPORTANT**
   > This is a new developer portal that generates keys used with the new APIM proxy for Viya Orders API. If you have keys that were generated in the [SAS Apigee Developer Portal](https://apiportal.sas.com), they will work until April 20, 2026.
 - [Go](https://golang.org/) 1.25.6 (or later) or [Docker](https://www.docker.com/) is required if you intend to build your own image.
 - [git](https://git-scm.com/) version 2 or later is required if you intend to clone the repository.
@@ -136,8 +136,8 @@ Take the following steps to start using SAS Viya Orders CLI:
     `APIMCLIENTCREDENTIALSID`).
    - Assign the encoded value of `Client Secret` to `apimClientCredentialsSecret` (if using environment variables, use
     `APIMCLIENTCREDENTIALSSECRET`).
-    
-   > **Important**
+
+   > **IMPORTANT**
    > If you are using keys generated in the [SAS Apigee Developer Portal](https://apiportal.sas.com/), the property names to convey those in are `clientCredentialsId` / `CLIENTCREDENTIALSID` and `clientCredentialsSecret` / `CLIENTCREDENTIALSSECRET`. These keys will cease to work on April 20, 2026.
 
 
