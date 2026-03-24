@@ -1,5 +1,5 @@
 # SAS Viya Orders CLI
-![Deprecation of Existing API Secrets for the Orders API](image-url-here)
+![Deprecation of Existing API Secrets for the Orders API](https://github.com/sassoftware/viya4-orders-cli/blob/main/orders.jpg)
 
 SAS Viya Orders is a command-line interface (CLI) that calls the appropriate
 [SAS Viya Orders API](https://developer.sas.com/rest-apis/mysas)
