@@ -1,12 +1,12 @@
 module github.com/sassoftware/viya4-orders-cli
 
-go 1.25.6
+go 1.26.0
 
 require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
-	golang.org/x/oauth2 v0.36.0
+	golang.org/x/oauth2 v0.37.0
 )
 
 require (
